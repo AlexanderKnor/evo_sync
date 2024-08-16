@@ -1,0 +1,181 @@
+{
+  "exercises": [
+    {
+      "equipment": "Maschine",
+      "machine_name": "Gym80 Beinpresse",
+      "muscle_groups": {
+        "primary": [
+          "Quadrizeps",
+          "Gesäßmuskulatur"
+        ],
+        "secondary": [
+          "Wadenmuskulatur",
+          "Adduktoren"
+        ]
+      },
+      "movement_description": "Setze dich in die Gym80 Beinpresse und lehne deinen Rücken flach gegen die Polsterung. Platziere deine Füße schulterbreit auf der Plattform. Drücke die Plattform nach vorne, bis deine Beine fast vollständig gestreckt sind. Achte darauf, die Knie nicht vollständig durchzudrücken, und kehre kontrolliert in die Ausgangsposition zurück.",
+      "range_of_motion": {
+        "description": "90° Kniebeugung bis nahezu volle Streckung, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+        "scale": 4
+      },
+      "stability": {
+        "description": "Diese Übung bietet hohe Stabilität, da dein Körper während der Bewegung gut gestützt ist.",
+        "scale": 5
+      },
+      "difficulty_level": {
+        "description": "Diese Übung ist aufgrund der geführten Bewegung und der hohen Stabilität relativ einfach durchzuführen.",
+        "scale": 2
+      },
+      "joint_stress": {
+        "description": "Die Belastung betrifft hauptsächlich deine Kniegelenke, insbesondere bei schwerer Last. Auch das Hüftgelenk wird beansprucht, jedoch weniger stark.",
+        "scale": 4,
+        "affected_joints": [
+          "Knie",
+          "Hüfte"
+        ]
+      },
+      "machine_specific_tips": "Diese Gym80 Beinpresse bietet eine besonders ergonomische Sitzposition, die den Druck auf deinen unteren Rücken minimiert. Achte darauf, die Sitzposition so einzustellen, dass deine Knie in der Ausgangsposition einen Winkel von etwa 90° haben.",
+      "safety_tips": "Achte darauf, deinen Rücken während der gesamten Übung fest gegen die Rückenlehne zu drücken, um eine Überbelastung deiner Lendenwirbelsäule zu vermeiden. Es wird empfohlen, die Sicherheitsstopps des Geräts zu verwenden, um eine Überstreckung zu verhindern.",
+      "modifications": [
+        "Ein einbeiniges Training auf diesem Gerät kann durchgeführt werden, indem du deinen Fuß mittig auf der Plattform positionierst. Dies erfordert eine sorgfältige Einstellung des Widerstands."
+      ],
+      "resistance_type": "Gewichtsstapel",
+      "adjustment_options": [
+        "Sitzhöhe",
+        "Fußposition"
+      ],
+      "interval_weight": "5 kg"
+    },
+    {
+      "equipment": "Kabelzug",
+      "machine_name": "Gym80 Latziehen",
+      "muscle_groups": {
+        "primary": [
+          "Latissimus dorsi",
+          "Bizeps"
+        ],
+        "secondary": [
+          "Schultern"
+        ]
+      },
+      "movement_description": "Setze dich an die Gym80 Latziehmaschine und greife die Stange breit mit deinen Händen. Fixiere deine Beine unter den Polstern und lehne deinen Rücken leicht nach hinten. Ziehe die Stange kontrolliert bis zu deiner oberen Brust und lasse die Stange langsam wieder nach oben gleiten, bis deine Arme fast gestreckt sind.",
+      "range_of_motion": {
+        "description": "Vom gestreckten Arm bis zur oberen Brust, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+        "scale": 4
+      },
+      "stability": {
+        "description": "Diese Übung bietet moderate Stabilität, da dein Oberkörper gut gestützt ist, aber deine Rumpfmuskulatur aktiviert bleibt.",
+        "scale": 4
+      },
+      "difficulty_level": {
+        "description": "Diese Übung erfordert moderate Anstrengung, besonders um die korrekte Technik bei der Rückführung der Stange beizubehalten.",
+        "scale": 3
+      },
+      "joint_stress": {
+        "description": "Die Belastung betrifft hauptsächlich deine Schultergelenke und Ellenbogen, insbesondere beim Ziehen des Gewichts nach unten.",
+        "scale": 3,
+        "affected_joints": [
+          "Schulter",
+          "Ellenbogen"
+        ]
+      },
+      "machine_specific_tips": "Diese Gym80 Latziehmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe so einzustellen, dass du eine stabile Position hast und deine Schultern nicht hochgezogen werden.",
+      "safety_tips": "Achte darauf, deinen Rücken während der gesamten Übung stabil zu halten und vermeide es, zu weit nach hinten zu lehnen. Ziehe die Stange kontrolliert und vermeide ruckartige Bewegungen.",
+      "modifications": [
+        "Du kannst den Griff enger fassen, um den Bizeps stärker zu aktivieren, oder den Griff weiter fassen, um den Latissimus mehr zu beanspruchen."
+      ],
+      "resistance_type": "Gewichtsstapel",
+      "adjustment_options": [
+        "Sitzhöhe",
+        "Griffbreite"
+      ],
+      "interval_weight": "5 kg"
+    },
+    {
+      "equipment": "Maschine",
+      "machine_name": "Gym80 Schulterdrücken",
+      "muscle_groups": {
+        "primary": [
+          "Schultern",
+          "Trizeps"
+        ],
+        "secondary": [
+          "Nacken"
+        ]
+      },
+      "movement_description": "Setze dich auf die Gym80 Schulterdrückmaschine und halte die Griffe auf Schulterhöhe. Deine Handflächen zeigen nach vorne. Drücke die Griffe nach oben, bis deine Arme fast vollständig gestreckt sind, und senke sie dann kontrolliert zurück auf Schulterhöhe.",
+      "range_of_motion": {
+        "description": "Von der Schulterhöhe bis zur fast vollen Armstreckung, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+        "scale": 4
+      },
+      "stability": {
+        "description": "Diese Übung bietet hohe Stabilität, da du durch die Rückenlehne gut gestützt bist.",
+        "scale": 5
+      },
+      "difficulty_level": {
+        "description": "Diese Übung ist aufgrund der geführten Bewegung und der Unterstützung durch die Maschine relativ einfach durchzuführen.",
+        "scale": 2
+      },
+      "joint_stress": {
+        "description": "Die Belastung betrifft hauptsächlich deine Schultergelenke und Ellenbogen, besonders beim Drücken des Gewichts nach oben.",
+        "scale": 3,
+        "affected_joints": [
+          "Schulter",
+          "Ellenbogen"
+        ]
+      },
+      "machine_specific_tips": "Diese Gym80 Schulterdrückmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe so einzustellen, dass die Griffe auf Schulterhöhe beginnen.",
+      "safety_tips": "Achte darauf, deinen Rücken fest gegen die Lehne zu drücken und vermeide es, ins Hohlkreuz zu fallen. Kontrolliere die Bewegung, um Verletzungen zu vermeiden.",
+      "modifications": [
+        "Du kannst die Übung einarmig durchführen, um die Muskulatur einzeln zu stärken und die Stabilität zu verbessern."
+      ],
+      "resistance_type": "Gewichtsstapel",
+      "adjustment_options": [
+        "Sitzhöhe",
+        "Griffweite"
+      ],
+      "interval_weight": "5 kg"
+    },
+    {
+      "equipment": "Maschine",
+      "machine_name": "Gym80 Beinstrecker",
+      "muscle_groups": {
+        "primary": [
+          "Quadrizeps"
+        ],
+        "secondary": []
+      },
+      "movement_description": "Setze dich auf die Gym80 Beinstreckmaschine und stelle die Polster so ein, dass sie direkt über deinen Füßen liegen. Drücke das Polster nach oben, bis deine Beine fast vollständig gestreckt sind. Senke das Gewicht kontrolliert zurück in die Ausgangsposition.",
+      "range_of_motion": {
+        "description": "Von der 90° Kniebeugung bis zur fast vollständigen Streckung, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+        "scale": 3
+      },
+      "stability": {
+        "description": "Diese Übung bietet hohe Stabilität, da dein Körper und deine Beine gut gestützt sind.",
+        "scale": 5
+      },
+      "difficulty_level": {
+        "description": "Diese Übung ist relativ einfach durchzuführen, da sie eine geführte Bewegung aufweist.",
+        "scale": 2
+      },
+      "joint_stress": {
+        "description": "Die Belastung betrifft hauptsächlich deine Kniegelenke, insbesondere beim Strecken des Gewichts.",
+        "scale": 4,
+        "affected_joints": [
+          "Knie"
+        ]
+      },
+      "machine_specific_tips": "Diese Gym80 Beinstreckmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe und das Polster so einzustellen, dass deine Knie in der richtigen Position sind.",
+      "safety_tips": "Achte darauf, das Gewicht kontrolliert zu heben und zu senken, um eine Überlastung der Kniegelenke zu vermeiden.",
+      "modifications": [
+        "Du kannst die Übung einbeinig durchführen, um die Muskulatur einzeln zu stärken."
+      ],
+      "resistance_type": "Gewichtsstapel",
+      "adjustment_options": [
+        "Sitzhöhe",
+        "Polsterposition"
+      ],
+      "interval_weight": "5 kg"
+    }
+  ]
+}
