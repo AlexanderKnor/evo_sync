@@ -77,7 +77,7 @@ class DetailsTab extends StatelessWidget {
             iconColor: Colors.green,
             title: 'Schwierigkeitsgrad',
             content: Text(
-              '${exercise.difficultyLevel['description']} (Skala: ${exercise.difficultyLevel['scale']})',
+              '${exercise.difficultyLevel['description']}',
               style: theme.textTheme.bodyLarge
                   ?.copyWith(color: theme.textTheme.bodyLarge?.color),
             ),
@@ -90,7 +90,7 @@ class DetailsTab extends StatelessWidget {
             iconColor: Colors.teal,
             title: 'Gelenkbelastung',
             content: Text(
-              '${exercise.jointStress['description']} (Skala: ${exercise.jointStress['scale']})\nBetroffene Gelenke: ${exercise.jointStress['affected_joints'].join(', ')}',
+              '${exercise.jointStress['description']}\nBetroffene Gelenke: ${exercise.jointStress['affected_joints'].join(', ')}',
               style: theme.textTheme.bodyLarge
                   ?.copyWith(color: theme.textTheme.bodyLarge?.color),
             ),
@@ -103,7 +103,7 @@ class DetailsTab extends StatelessWidget {
             iconColor: Colors.blueGrey,
             title: 'Systemische Belastung',
             content: Text(
-              '${exercise.systemicStress['description']} (Skala: ${exercise.systemicStress['scale']})',
+              '${exercise.systemicStress['description']}',
               style: theme.textTheme.bodyLarge
                   ?.copyWith(color: theme.textTheme.bodyLarge?.color),
             ),

@@ -1,0 +1,49 @@
+{
+  "equipment": "Maschine",
+  "machine_name": "Gym80 Schulterdrücken",
+  "muscle_groups": {
+    "primary": [
+      "Front Delts",
+      "Triceps"
+    ],
+    "secondary": [
+      "Traps"
+    ]
+  },
+  "movement_description": "Setze dich auf die Gym80 Schulterdrückmaschine und halte die Griffe auf Schulterhöhe. Deine Handflächen zeigen nach vorne. Drücke die Griffe nach oben, bis deine Arme fast vollständig gestreckt sind, und senke sie dann kontrolliert zurück auf Schulterhöhe.",
+  "range_of_motion": {
+    "description": "Von der Schulterhöhe bis zur fast vollen Armstreckung, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+    "scale": 4
+  },
+  "stability": {
+    "description": "Diese Übung bietet hohe Stabilität, da du durch die Rückenlehne gut gestützt bist.",
+    "scale": 5
+  },
+  "difficulty_level": {
+    "description": "Diese Übung ist aufgrund der geführten Bewegung und der Unterstützung durch die Maschine relativ einfach durchzuführen.",
+    "scale": 2
+  },
+  "joint_stress": {
+    "description": "Die Belastung betrifft hauptsächlich deine Schultergelenke und Ellenbogen, besonders beim Drücken des Gewichts nach oben.",
+    "scale": 3,
+    "affected_joints": [
+      "Schulter",
+      "Ellenbogen"
+    ]
+  },
+  "systemic_stress": {
+    "description": "Schulterdrücken auf der Maschine hat eine moderate systematische Belastung, da die Schulter- und Trizepsmuskulatur intensiv arbeiten muss, obwohl die Maschine Stabilität bietet.",
+    "scale": 3
+  },
+  "machine_specific_tips": "Diese Gym80 Schulterdrückmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe so einzustellen, dass die Griffe auf Schulterhöhe beginnen.",
+  "safety_tips": "Achte darauf, deinen Rücken fest gegen die Lehne zu drücken und vermeide es, ins Hohlkreuz zu fallen. Kontrolliere die Bewegung, um Verletzungen zu vermeiden.",
+  "modifications": [
+    "Du kannst die Übung einarmig durchführen, um die Muskulatur einzeln zu stärken und die Stabilität zu verbessern."
+  ],
+  "resistance_type": "Gewichtsstapel",
+  "adjustment_options": [
+    "Sitzhöhe",
+    "Griffweite"
+  ],
+  "interval_weight": "5 kg"
+}

@@ -1,0 +1,50 @@
+{
+  "equipment": "Maschine",
+  "machine_name": "Gym80 Beinpresse",
+  "muscle_groups": {
+    "primary": [
+      "Quad",
+      "Glutes"
+    ],
+    "secondary": [
+      "Calves",
+      "Adductors"
+    ]
+  },
+  "movement_description": "Setze dich in die Gym80 Beinpresse und lehne deinen Rücken flach gegen die Polsterung. Platziere deine Füße schulterbreit auf der Plattform. Drücke die Plattform nach vorne, bis deine Beine fast vollständig gestreckt sind. Achte darauf, die Knie nicht vollständig durchzudrücken, und kehre kontrolliert in die Ausgangsposition zurück.",
+  "range_of_motion": {
+    "description": "90° Kniebeugung bis nahezu volle Streckung, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+    "scale": 4
+  },
+  "stability": {
+    "description": "Diese Übung bietet hohe Stabilität, da dein Körper während der Bewegung gut gestützt ist.",
+    "scale": 5
+  },
+  "difficulty_level": {
+    "description": "Diese Übung ist aufgrund der geführten Bewegung und der hohen Stabilität relativ einfach durchzuführen.",
+    "scale": 5
+  },
+  "joint_stress": {
+    "description": "Die Belastung betrifft hauptsächlich deine Kniegelenke, insbesondere bei schwerer Last. Auch das Hüftgelenk wird beansprucht, jedoch weniger stark.",
+    "scale": 4,
+    "affected_joints": [
+      "Knie",
+      "Hüfte"
+    ]
+  },
+  "systemic_stress": {
+    "description": "Die Beinpresse stellt eine moderate systematische Belastung dar, da große Muskelgruppen wie Quadrizeps und Gesäßmuskulatur involviert sind, jedoch die Bewegung durch die Maschine unterstützt wird.",
+    "scale": 3
+  },
+  "machine_specific_tips": "Diese Gym80 Beinpresse bietet eine besonders ergonomische Sitzposition, die den Druck auf deinen unteren Rücken minimiert. Achte darauf, die Sitzposition so einzustellen, dass deine Knie in der Ausgangsposition einen Winkel von etwa 90° haben.",
+  "safety_tips": "Achte darauf, deinen Rücken während der gesamten Übung fest gegen die Rückenlehne zu drücken, um eine Überbelastung deiner Lendenwirbelsäule zu vermeiden. Es wird empfohlen, die Sicherheitsstopps des Geräts zu verwenden, um eine Überstreckung zu verhindern.",
+  "modifications": [
+    "Ein einbeiniges Training auf diesem Gerät kann durchgeführt werden, indem du deinen Fuß mittig auf der Plattform positionierst. Dies erfordert eine sorgfältige Einstellung des Widerstands."
+  ],
+  "resistance_type": "Gewichtsstapel",
+  "adjustment_options": [
+    "Sitzhöhe",
+    "Fußposition"
+  ],
+  "interval_weight": "5 kg"
+}

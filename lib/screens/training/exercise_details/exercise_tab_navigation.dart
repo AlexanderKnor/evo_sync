@@ -15,21 +15,7 @@ class ExerciseDetailScreen extends StatefulWidget {
 
 class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   int _currentIndex = 0;
-
-  final List<Widget> _tabs = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _tabs.add(MetricsMusclesTab(exercise: widget.exercise));
-    _tabs.add(DetailsTab(exercise: widget.exercise));
-  }
-
-  void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +24,34 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
         title: Text(widget.exercise.title),
         backgroundColor: Colors.blueAccent,
       ),
-      body: _tabs[_currentIndex],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        children: [
+          MetricsMusclesTab(exercise: widget.exercise),
+          DetailsTab(exercise: widget.exercise),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: _onTabTapped,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            _pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          });
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
-            label: 'Metriken & Muskeln',
+            label: 'Metriken',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.info_outline),

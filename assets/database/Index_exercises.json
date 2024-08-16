@@ -1,0 +1,10 @@
+{
+  "files": [
+    "gym80_beinpresse.json",
+    "gym80_latziehen.json",
+    "gym80_schulterdruecken.json",
+    "gym80_hackenschmidt.json",
+    "gym80_trizepsdruecken.json",
+    "gym80_beinstrecker.json"
+  ]
+}

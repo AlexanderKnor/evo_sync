@@ -1,0 +1,49 @@
+{
+  "equipment": "Kabelzug",
+  "machine_name": "Gym80 Latziehen",
+  "muscle_groups": {
+    "primary": [
+      "Back",
+      "Biceps"
+    ],
+    "secondary": [
+      "Front Delts"
+    ]
+  },
+  "movement_description": "Setze dich an die Gym80 Latziehmaschine und greife die Stange breit mit deinen Händen. Fixiere deine Beine unter den Polstern und lehne deinen Rücken leicht nach hinten. Ziehe die Stange kontrolliert bis zu deiner oberen Brust und lasse die Stange langsam wieder nach oben gleiten, bis deine Arme fast gestreckt sind.",
+  "range_of_motion": {
+    "description": "Vom gestreckten Arm bis zur oberen Brust, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+    "scale": 4
+  },
+  "stability": {
+    "description": "Diese Übung bietet moderate Stabilität, da dein Oberkörper gut gestützt ist, aber deine Rumpfmuskulatur aktiviert bleibt.",
+    "scale": 4
+  },
+  "difficulty_level": {
+    "description": "Diese Übung erfordert moderate Anstrengung, besonders um die korrekte Technik bei der Rückführung der Stange beizubehalten.",
+    "scale": 3
+  },
+  "joint_stress": {
+    "description": "Die Belastung betrifft hauptsächlich deine Schultergelenke und Ellenbogen, insbesondere beim Ziehen des Gewichts nach unten.",
+    "scale": 3,
+    "affected_joints": [
+      "Schulter",
+      "Ellenbogen"
+    ]
+  },
+  "systemic_stress": {
+    "description": "Latziehen hat eine niedrige bis moderate systematische Belastung, da die Übung hauptsächlich den oberen Rücken und die Arme beansprucht und wenig Auswirkung auf das Zentralnervensystem hat.",
+    "scale": 2
+  },
+  "machine_specific_tips": "Diese Gym80 Latziehmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe so einzustellen, dass du eine stabile Position hast und deine Schultern nicht hochgezogen werden.",
+  "safety_tips": "Achte darauf, deinen Rücken während der gesamten Übung stabil zu halten und vermeide es, zu weit nach hinten zu lehnen. Ziehe die Stange kontrolliert und vermeide ruckartige Bewegungen.",
+  "modifications": [
+    "Du kannst den Griff enger fassen, um den Bizeps stärker zu aktivieren, oder den Griff weiter fassen, um den Latissimus mehr zu beanspruchen."
+  ],
+  "resistance_type": "Gewichtsstapel",
+  "adjustment_options": [
+    "Sitzhöhe",
+    "Griffbreite"
+  ],
+  "interval_weight": "5 kg"
+}

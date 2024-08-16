@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:evosync/theme/dark_mode_notifier.dart';
 import 'package:evosync/widgets/nutrition/rmr_calculator.dart';
-import 'package:evosync/widgets/training_screen_widgets/theme_toggle_button.dart';
+import 'package:evosync/widgets/generic/theme_toggle_button.dart';
 import 'package:evosync/widgets/nutrition/neat_calculator.dart';
 import 'package:evosync/widgets/nutrition/krafttraining_calculator.dart';
 import 'package:evosync/widgets/nutrition/tef_widget.dart';

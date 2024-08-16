@@ -1,0 +1,45 @@
+{
+  "equipment": "Maschine",
+  "machine_name": "Gym80 Beinstrecker",
+  "muscle_groups": {
+    "primary": [
+      "Quad"
+    ],
+    "secondary": []
+  },
+  "movement_description": "Setze dich auf die Gym80 Beinstreckmaschine und stelle die Polster so ein, dass sie direkt über deinen Füßen liegen. Drücke das Polster nach oben, bis deine Beine fast vollständig gestreckt sind. Senke das Gewicht kontrolliert zurück in die Ausgangsposition.",
+  "range_of_motion": {
+    "description": "Von der 90° Kniebeugung bis zur fast vollständigen Streckung, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+    "scale": 3
+  },
+  "stability": {
+    "description": "Diese Übung bietet hohe Stabilität, da dein Körper und deine Beine gut gestützt sind.",
+    "scale": 5
+  },
+  "difficulty_level": {
+    "description": "Diese Übung ist relativ einfach durchzuführen, da sie eine geführte Bewegung aufweist.",
+    "scale": 2
+  },
+  "joint_stress": {
+    "description": "Die Belastung betrifft hauptsächlich deine Kniegelenke, insbesondere beim Strecken des Gewichts.",
+    "scale": 4,
+    "affected_joints": [
+      "Knie"
+    ]
+  },
+  "systemic_stress": {
+    "description": "Der Beinstrecker hat eine niedrige systematische Belastung, da die Übung isoliert den Quadrizeps beansprucht und wenig Einfluss auf das Zentralnervensystem hat.",
+    "scale": 1
+  },
+  "machine_specific_tips": "Diese Gym80 Beinstreckmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe und das Polster so einzustellen, dass deine Knie in der richtigen Position sind.",
+  "safety_tips": "Achte darauf, das Gewicht kontrolliert zu heben und zu senken, um eine Überlastung der Kniegelenke zu vermeiden.",
+  "modifications": [
+    "Du kannst die Übung einbeinig durchführen, um die Muskulatur einzeln zu stärken."
+  ],
+  "resistance_type": "Gewichtsstapel",
+  "adjustment_options": [
+    "Sitzhöhe",
+    "Polsterposition"
+  ],
+  "interval_weight": "5 kg"
+}

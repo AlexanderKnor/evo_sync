@@ -46,7 +46,8 @@ flutter:
 
   # Assets in der Anwendung
   assets:
-    - assets/database/exercises.json
+    - assets/database/Index_exercises.json
+    - assets/database/exercises/
     - assets/database/sportarten_met.json
 
   # Weitere Informationen zum Hinzufügen von Assets aus Paketabhängigkeiten findest du unter

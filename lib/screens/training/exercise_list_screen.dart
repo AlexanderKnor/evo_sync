@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:evosync/models/exercise_converter.dart';
-import 'package:evosync/screens/training/exercise_details/exercise_detail_screen.dart';
-import 'package:evosync/widgets/generic/slide_fade_transition.dart';
-import 'package:evosync/widgets/generic/icon_circle.dart'; // Neue Import
+import 'package:evosync/screens/training/exercise_details/exercise_tab_navigation.dart';
+import 'package:evosync/widgets/generic/custom_slide_transition.dart';
+import 'package:evosync/widgets/generic/icon_circle.dart';
 
 class ExerciseListScreen extends StatefulWidget {
   const ExerciseListScreen({Key? key}) : super(key: key);
@@ -23,13 +23,20 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
   }
 
   Future<List<Exercise>> _loadExercises() async {
-    final String response =
-        await rootBundle.loadString('assets/database/exercises.json');
-    final Map<String, dynamic> data = json.decode(response);
-    final List<dynamic> exercisesJson = data['exercises'];
-    return exercisesJson
-        .map<Exercise>((json) => Exercise.fromJson(json))
-        .toList();
+    final String indexResponse =
+        await rootBundle.loadString('assets/database/Index_exercises.json');
+    final Map<String, dynamic> indexData = json.decode(indexResponse);
+    final List<String> exerciseFiles = List<String>.from(indexData['files']);
+
+    List<Exercise> exercises = [];
+    for (String file in exerciseFiles) {
+      final String jsonString =
+          await rootBundle.loadString('assets/database/exercises/$file');
+      final Map<String, dynamic> jsonMap = json.decode(jsonString);
+      exercises.add(Exercise.fromJson(jsonMap));
+    }
+
+    return exercises;
   }
 
   @override
@@ -40,7 +47,7 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Übungen'),
-        backgroundColor: Colors.blue, // Farbe explizit auf Blau gesetzt
+        backgroundColor: Colors.blue,
       ),
       body: FutureBuilder<List<Exercise>>(
         future: exercises,
@@ -76,7 +83,7 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
                                   ExerciseDetailScreen(exercise: exercise),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
-                            return SlideFadeTransition(
+                            return CustomSlideTransition(
                               animation: animation,
                               child: child,
                             );
@@ -109,7 +116,6 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
                       child: Row(
                         children: [
                           const IconCircle(
-                            // Verwendung der IconCircle Klasse
                             icon: Icons.fitness_center,
                             iconColor: Colors.blueAccent,
                           ),

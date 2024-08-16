@@ -1,0 +1,47 @@
+{
+  "equipment": "Maschine",
+  "machine_name": "Gym80 Trizepsdrücken",
+  "muscle_groups": {
+    "primary": [
+      "Triceps"
+    ],
+    "secondary": [
+      "Chest"
+    ]
+  },
+  "movement_description": "Setze dich auf die Gym80 Trizepsdrückmaschine und greife die Griffe fest. Drücke das Gewicht nach unten, bis deine Arme fast vollständig gestreckt sind. Senke das Gewicht kontrolliert wieder ab, bis deine Arme einen 90°-Winkel erreichen.",
+  "range_of_motion": {
+    "description": "Von der 90°-Beugung bis zur fast vollständigen Streckung der Arme.",
+    "scale": 3
+  },
+  "stability": {
+    "description": "Hohe Stabilität durch die Rückenlehne und geführte Bewegung.",
+    "scale": 5
+  },
+  "difficulty_level": {
+    "description": "Relativ einfach durchzuführen, besonders für die Trizepsmuskulatur.",
+    "scale": 2
+  },
+  "joint_stress": {
+    "description": "Geringe bis moderate Belastung der Ellenbogengelenke.",
+    "scale": 2,
+    "affected_joints": [
+      "Ellenbogen"
+    ]
+  },
+  "systemic_stress": {
+    "description": "Geringe systematische Belastung, da die Übung isoliert auf den Trizeps abzielt.",
+    "scale": 1
+  },
+  "machine_specific_tips": "Achte darauf, dass die Sitzhöhe so eingestellt ist, dass die Griffe in einer natürlichen Position für deine Hände liegen.",
+  "safety_tips": "Halte die Bewegung kontrolliert, um die Ellenbogengelenke nicht zu überlasten.",
+  "modifications": [
+    "Für mehr Intensität kannst du einarmig drücken."
+  ],
+  "resistance_type": "Gewichtsstapel",
+  "adjustment_options": [
+    "Sitzhöhe",
+    "Griffweite"
+  ],
+  "interval_weight": "2.5 kg"
+}

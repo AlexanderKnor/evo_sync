@@ -1,0 +1,49 @@
+{
+  "equipment": "Maschine",
+  "machine_name": "Gym80 Hackenschmidt-Kniebeuge",
+  "muscle_groups": {
+    "primary": [
+      "Quad",
+      "Glutes"
+    ],
+    "secondary": [
+      "Hamstrings"
+    ]
+  },
+  "movement_description": "Stelle dich auf die Plattform der Hackenschmidt-Maschine. Lehne deinen Rücken gegen das Polster und halte die Griffe fest. Senke deinen Körper kontrolliert, bis deine Knie einen Winkel von 90° erreichen, und drücke dich dann wieder nach oben.",
+  "range_of_motion": {
+    "description": "Von der 90° Kniebeugung bis zur fast vollständigen Streckung, spezifisch für den Bewegungsweg dieser Gym80 Maschine.",
+    "scale": 4
+  },
+  "stability": {
+    "description": "Hohe Stabilität durch die Rückenlehne und geführte Bewegung.",
+    "scale": 5
+  },
+  "difficulty_level": {
+    "description": "Mittlere Schwierigkeit, erfordert gute Technik und Rumpfstabilität.",
+    "scale": 3
+  },
+  "joint_stress": {
+    "description": "Moderate Belastung der Knie- und Hüftgelenke.",
+    "scale": 3,
+    "affected_joints": [
+      "Knie",
+      "Hüfte"
+    ]
+  },
+  "systemic_stress": {
+    "description": "Moderate systematische Belastung durch den Einsatz großer Muskelgruppen.",
+    "scale": 3
+  },
+  "machine_specific_tips": "Stelle sicher, dass dein Rücken während der gesamten Bewegung flach anliegt und vermeide es, die Knie vollständig durchzustrecken.",
+  "safety_tips": "Halte die Bewegung kontrolliert und vermeide plötzliche Bewegungen, um Verletzungen der Knie zu vermeiden.",
+  "modifications": [
+    "Für eine stärkere Betonung der Quadrizeps kannst du die Füße weiter nach vorne positionieren."
+  ],
+  "resistance_type": "Gewichtsstapel",
+  "adjustment_options": [
+    "Sitzhöhe",
+    "Fußposition"
+  ],
+  "interval_weight": "5 kg"
+}

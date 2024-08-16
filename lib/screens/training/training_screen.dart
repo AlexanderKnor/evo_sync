@@ -3,25 +3,31 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:evosync/theme/dark_mode_notifier.dart';
-import 'package:evosync/widgets/training_screen_widgets/date_widget.dart';
-import 'package:evosync/widgets/training_screen_widgets/create_plan_button.dart';
-import 'package:evosync/widgets/training_screen_widgets/theme_toggle_button.dart';
+import 'package:evosync/widgets/training/date_widget.dart';
+import 'package:evosync/widgets/training/create_plan_button.dart';
+import 'package:evosync/widgets/generic/theme_toggle_button.dart';
 import 'package:evosync/screens/training/exercise_list_screen.dart';
+import 'package:evosync/widgets/generic/custom_slide_transition.dart';
 
 class TrainingScreen extends StatefulWidget {
   const TrainingScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _TrainingScreenState createState() => _TrainingScreenState();
 }
 
-class _TrainingScreenState extends State<TrainingScreen> {
+class _TrainingScreenState extends State<TrainingScreen>
+    with SingleTickerProviderStateMixin {
   bool _isInitialized = false;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
     _initializeDateFormatting();
   }
 
@@ -29,7 +35,14 @@ class _TrainingScreenState extends State<TrainingScreen> {
     await initializeDateFormatting('de_DE', null);
     setState(() {
       _isInitialized = true;
+      _controller.forward();
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,11 +55,8 @@ class _TrainingScreenState extends State<TrainingScreen> {
     final isDarkMode = darkModeNotifier.themeMode == ThemeMode.dark;
 
     return Scaffold(
-      body: AnimatedContainer(
-        duration: const Duration(milliseconds: 300), // Dauer des Übergangs
-        decoration: BoxDecoration(
-          color: isDarkMode ? Colors.black : Colors.white,
-        ),
+      body: CustomSlideTransition(
+        animation: _controller,
         child: Stack(
           children: [
             Padding(
@@ -98,11 +108,9 @@ class _TrainingScreenState extends State<TrainingScreen> {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-                      // Navigieren zur ExerciseListScreen
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const ExerciseListScreen()),
+                        _createRoute(const ExerciseListScreen()),
                       );
                     },
                     child: const Text(
@@ -189,5 +197,17 @@ class _TrainingScreenState extends State<TrainingScreen> {
         },
       );
     }).toList();
+  }
+
+  Route _createRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return CustomSlideTransition(
+          animation: animation,
+          child: child,
+        );
+      },
+    );
   }
 }

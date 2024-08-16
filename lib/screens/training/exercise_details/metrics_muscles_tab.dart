@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:evosync/models/exercise_converter.dart';
-import 'package:evosync/widgets/training_screen_widgets/exercise/metric_bar.dart';
+import 'package:evosync/widgets/training/exercise/metric_bar.dart';
 
 class MetricsMusclesTab extends StatelessWidget {
   final Exercise exercise;
@@ -75,27 +75,30 @@ class MetricsMusclesTab extends StatelessWidget {
             const SizedBox(height: 16),
             MetricBar(
               label: 'Range of Motion',
-              value: exercise.rangeOfMotion.toDouble(),
+              value: (exercise.rangeOfMotion['scale'] as num).toDouble(),
             ),
             const SizedBox(height: 16),
             MetricBar(
               label: 'Stabilität',
-              value: exercise.stability.toDouble(),
+              value: (exercise.stability['scale'] as num).toDouble(),
             ),
             const SizedBox(height: 16),
             MetricBar(
               label: 'Schwierigkeit',
-              value: exercise.difficultyLevel['scale'].toDouble(),
+              value: (exercise.difficultyLevel['scale'] as num).toDouble(),
+              reverseScale: true, // Umkehrung der Farbskala für Schwierigkeit
             ),
             const SizedBox(height: 16),
             MetricBar(
               label: 'Gelenkbelastung',
-              value: exercise.jointStress['scale'].toDouble(),
+              value: (exercise.jointStress['scale'] as num).toDouble(),
+              reverseScale: true, // Umkehrung der Farbskala für Schwierigkeit
             ),
             const SizedBox(height: 16),
             MetricBar(
               label: 'Systemische Belastung',
-              value: exercise.systemicStress['scale'].toDouble(),
+              value: (exercise.systemicStress['scale'] as num).toDouble(),
+              reverseScale: true, // Umkehrung der Farbskala für Schwierigkeit
             ),
           ],
         ),

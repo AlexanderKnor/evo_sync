@@ -4,23 +4,35 @@ class MetricBar extends StatelessWidget {
   final String label;
   final double value; // Erwartet wird ein Wert zwischen 0 und 5
   final String? tooltip;
+  final bool reverseScale; // Parameter zur Umkehrung der Farbskala
 
   const MetricBar({
     Key? key,
     required this.label,
     required this.value,
     this.tooltip,
+    this.reverseScale = false, // Standardmäßig ist die Skala nicht umgekehrt
   }) : super(key: key);
 
   // Methode zur dynamischen Berechnung der Farbe basierend auf dem Wert
   Color _getColorForValue(double value) {
-    if (value <= 2.0) {
-      // Interpolation zwischen Rot und Gelb
-      return Color.lerp(Colors.red, Colors.yellow, value / 2.0) ?? Colors.red;
+    if (reverseScale) {
+      // Umgekehrte Farbskala
+      if (value <= 2.0) {
+        return Color.lerp(Colors.green, Colors.yellow, value / 2.0) ??
+            Colors.green;
+      } else {
+        return Color.lerp(Colors.yellow, Colors.red, (value - 2.0) / 3.0) ??
+            Colors.red;
+      }
     } else {
-      // Interpolation zwischen Gelb und Grün
-      return Color.lerp(Colors.yellow, Colors.green, (value - 2.0) / 3.0) ??
-          Colors.green;
+      // Normale Farbskala
+      if (value <= 2.0) {
+        return Color.lerp(Colors.red, Colors.yellow, value / 2.0) ?? Colors.red;
+      } else {
+        return Color.lerp(Colors.yellow, Colors.green, (value - 2.0) / 3.0) ??
+            Colors.green;
+      }
     }
   }
 
