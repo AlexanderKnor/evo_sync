@@ -70,6 +70,45 @@ class DetailsTab extends StatelessWidget {
             ),
             isDarkMode: isDarkMode,
           ),
+          const SizedBox(height: 16),
+          _buildCard(
+            context: context,
+            icon: Icons.assessment,
+            iconColor: Colors.green,
+            title: 'Schwierigkeitsgrad',
+            content: Text(
+              '${exercise.difficultyLevel['description']} (Skala: ${exercise.difficultyLevel['scale']})',
+              style: theme.textTheme.bodyLarge
+                  ?.copyWith(color: theme.textTheme.bodyLarge?.color),
+            ),
+            isDarkMode: isDarkMode,
+          ),
+          const SizedBox(height: 16),
+          _buildCard(
+            context: context,
+            icon: Icons.accessibility_new,
+            iconColor: Colors.teal,
+            title: 'Gelenkbelastung',
+            content: Text(
+              '${exercise.jointStress['description']} (Skala: ${exercise.jointStress['scale']})\nBetroffene Gelenke: ${exercise.jointStress['affected_joints'].join(', ')}',
+              style: theme.textTheme.bodyLarge
+                  ?.copyWith(color: theme.textTheme.bodyLarge?.color),
+            ),
+            isDarkMode: isDarkMode,
+          ),
+          const SizedBox(height: 16),
+          _buildCard(
+            context: context,
+            icon: Icons.spa,
+            iconColor: Colors.blueGrey,
+            title: 'Systemische Belastung',
+            content: Text(
+              '${exercise.systemicStress['description']} (Skala: ${exercise.systemicStress['scale']})',
+              style: theme.textTheme.bodyLarge
+                  ?.copyWith(color: theme.textTheme.bodyLarge?.color),
+            ),
+            isDarkMode: isDarkMode,
+          ),
         ],
       ),
     );

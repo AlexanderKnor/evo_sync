@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:evosync/models/exercise_converter.dart';
-import 'package:evosync/widgets/training_screen_widgets/exercise/metric_bar.dart'; // Korrekte Import-Anweisung
+import 'package:evosync/widgets/training_screen_widgets/exercise/metric_bar.dart';
 
 class MetricsMusclesTab extends StatelessWidget {
   final Exercise exercise;
@@ -20,6 +20,8 @@ class MetricsMusclesTab extends StatelessWidget {
           _buildMetricsCard(context, exercise),
           const SizedBox(height: 16),
           _buildMuscleGroupsCard(context, exercise, isDarkMode),
+          const SizedBox(height: 16),
+          _buildJointStressCard(context, exercise, isDarkMode),
         ],
       ),
     );
@@ -90,6 +92,11 @@ class MetricsMusclesTab extends StatelessWidget {
               label: 'Gelenkbelastung',
               value: exercise.jointStress['scale'].toDouble(),
             ),
+            const SizedBox(height: 16),
+            MetricBar(
+              label: 'Systemische Belastung',
+              value: exercise.systemicStress['scale'].toDouble(),
+            ),
           ],
         ),
       ),
@@ -145,11 +152,68 @@ class MetricsMusclesTab extends StatelessWidget {
               icon: Icons.fitness_center,
             ),
             const SizedBox(height: 16),
+            if (exercise.secondaryMuscles.isNotEmpty) ...[
+              _buildMuscleGroup(
+                label: 'Sekundäre Muskeln',
+                muscles: exercise.secondaryMuscles,
+                color: isDarkMode ? Colors.lightBlueAccent : Colors.blueAccent,
+                icon: Icons.accessibility_new,
+              ),
+              const SizedBox(height: 16),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildJointStressCard(
+      BuildContext context, Exercise exercise, bool isDarkMode) {
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      elevation: 12,
+      shadowColor: isDarkMode ? Colors.black38 : Colors.grey.shade300,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isDarkMode
+                ? [theme.cardColor, theme.scaffoldBackgroundColor]
+                : [Colors.white, Colors.blue.shade50],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: isDarkMode ? Colors.black45 : Colors.grey.shade300,
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Belastete Gelenke',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.textTheme.headlineSmall?.color,
+              ),
+            ),
+            const SizedBox(height: 16),
             _buildMuscleGroup(
-              label: 'Sekundäre Muskeln',
-              muscles: exercise.secondaryMuscles,
-              color: isDarkMode ? Colors.lightBlueAccent : Colors.blueAccent,
-              icon: Icons.accessibility_new,
+              label: 'Gelenke',
+              muscles: exercise.jointStress['affected_joints'].cast<String>(),
+              color: isDarkMode ? Colors.orangeAccent : Colors.orange,
+              icon: Icons.accessibility,
             ),
           ],
         ),

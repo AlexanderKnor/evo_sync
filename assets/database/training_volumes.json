@@ -1,0 +1,302 @@
+{
+  "body_parts": [
+    {
+      "name": "Abs",
+      "mv": 0,
+      "mev": {
+        "min": 16,
+        "max": 20
+      },
+      "mav": {
+        "min": 25,
+        "max": null
+      },
+      "mrv": {
+        "min": 25,
+        "max": null
+      },
+      "frequency": {
+        "min": 3,
+        "max": 5
+      },
+      "loading": {
+        "min_reps": 8,
+        "max_reps": 20
+      }
+    },
+    {
+      "name": "Back",
+      "mv": 8,
+      "mev": {
+        "min": 10,
+        "max": 14
+      },
+      "mav": {
+        "min": 14,
+        "max": 22
+      },
+      "mrv": {
+        "min": 25,
+        "max": null
+      },
+      "frequency": {
+        "min": 2,
+        "max": 4
+      },
+      "loading": {
+        "min_reps": 6,
+        "max_reps": 20
+      }
+    },
+    {
+      "name": "Biceps",
+      "mv": 5,
+      "mev": {
+        "min": 8,
+        "max": 14
+      },
+      "mav": {
+        "min": 14,
+        "max": 20
+      },
+      "mrv": {
+        "min": 26,
+        "max": null
+      },
+      "frequency": {
+        "min": 2,
+        "max": 6
+      },
+      "loading": {
+        "min_reps": 8,
+        "max_reps": 15
+      }
+    },
+    {
+      "name": "Triceps",
+      "mv": 4,
+      "mev": {
+        "min": 6,
+        "max": 10
+      },
+      "mav": {
+        "min": 10,
+        "max": 14
+      },
+      "mrv": {
+        "min": 18,
+        "max": null
+      },
+      "frequency": {
+        "min": 2,
+        "max": 4
+      },
+      "loading": {
+        "pressing": {
+          "min_reps": 6,
+          "max_reps": 15
+        },
+        "extension": {
+          "min_reps": 10,
+          "max_reps": 20
+        }
+      }
+    },
+    {
+      "name": "Calves",
+      "mv": 6,
+      "mev": {
+        "min": 8,
+        "max": 12
+      },
+      "mav": {
+        "min": 12,
+        "max": 16
+      },
+      "mrv": {
+        "min": 20,
+        "max": null
+      },
+      "frequency": {
+        "min": 2,
+        "max": 4
+      },
+      "loading": {
+        "percent_1rm": {
+          "min": 60,
+          "max": 70
+        }
+      }
+    },
+    {
+      "name": "Chest",
+      "mv": 8,
+      "mev": {
+        "min": 10,
+        "max": 12
+      },
+      "mav": {
+        "min": 12,
+        "max": 20
+      },
+      "mrv": {
+        "min": 22,
+        "max": null
+      },
+      "frequency": {
+        "min": 1.5,
+        "max": 3
+      },
+      "loading": {
+        "min_reps": 8,
+        "max_reps": 12
+      }
+    },
+    {
+      "name": "Front Delts",
+      "mv": 0,
+      "mev": {
+        "min": 6,
+        "max": 8
+      },
+      "mav": {
+        "min": 12,
+        "max": null
+      },
+      "mrv": {
+        "min": 12,
+        "max": null
+      },
+      "frequency": {
+        "min": 1,
+        "max": 2
+      },
+      "loading": {
+        "min_reps": 6,
+        "max_reps": 10
+      }
+    },
+    {
+      "name": "Glutes",
+      "mv": 0,
+      "mev": {
+        "min": 4,
+        "max": 12
+      },
+      "mav": {
+        "min": 16,
+        "max": null
+      },
+      "mrv": {
+        "min": 16,
+        "max": null
+      },
+      "frequency": {
+        "min": 2,
+        "max": 3
+      },
+      "loading": {
+        "min_reps": 8,
+        "max_reps": 12
+      }
+    },
+    {
+      "name": "Hamstring",
+      "mv": 4,
+      "mev": {
+        "min": 6,
+        "max": 10
+      },
+      "mav": {
+        "min": 10,
+        "max": 16
+      },
+      "mrv": {
+        "min": 20,
+        "max": null
+      },
+      "frequency": {
+        "min": 2,
+        "max": 3
+      },
+      "loading": {
+        "percent_1rm": {
+          "min": 70,
+          "max": 85
+        }
+      }
+    },
+    {
+      "name": "Quad",
+      "mv": 6,
+      "mev": {
+        "min": 8,
+        "max": 12
+      },
+      "mav": {
+        "min": 12,
+        "max": 18
+      },
+      "mrv": {
+        "min": 20,
+        "max": null
+      },
+      "frequency": {
+        "min": 1.5,
+        "max": 3
+      },
+      "loading": {
+        "min_reps": 8,
+        "max_reps": 15
+      }
+    },
+    {
+      "name": "Rear/Side Delt",
+      "mv": 0,
+      "mev": {
+        "min": 16,
+        "max": 22
+      },
+      "mav": {
+        "min": 16,
+        "max": 22
+      },
+      "mrv": {
+        "min": 26,
+        "max": null
+      },
+      "frequency": {
+        "min": 2,
+        "max": 6
+      },
+      "loading": {
+        "min_reps": 10,
+        "max_reps": 12
+      }
+    },
+    {
+      "name": "Traps",
+      "mv": 0,
+      "mev": {
+        "min": 8,
+        "max": 10
+      },
+      "mav": {
+        "min": 12,
+        "max": 20
+      },
+      "mrv": {
+        "min": 26,
+        "max": null
+      },
+      "frequency": {
+        "min": 2,
+        "max": 6
+      },
+      "loading": {
+        "min_reps": 10,
+        "max_reps": 20
+      }
+    }
+  ]
+}

@@ -5,12 +5,12 @@
       "machine_name": "Gym80 Beinpresse",
       "muscle_groups": {
         "primary": [
-          "Quadrizeps",
-          "Gesäßmuskulatur"
+          "Quad",
+          "Glutes"
         ],
         "secondary": [
-          "Wadenmuskulatur",
-          "Adduktoren"
+          "Calves",
+          "Adductors"
         ]
       },
       "movement_description": "Setze dich in die Gym80 Beinpresse und lehne deinen Rücken flach gegen die Polsterung. Platziere deine Füße schulterbreit auf der Plattform. Drücke die Plattform nach vorne, bis deine Beine fast vollständig gestreckt sind. Achte darauf, die Knie nicht vollständig durchzudrücken, und kehre kontrolliert in die Ausgangsposition zurück.",
@@ -34,6 +34,10 @@
           "Hüfte"
         ]
       },
+      "systemic_stress": {
+        "description": "Die Beinpresse stellt eine moderate systematische Belastung dar, da große Muskelgruppen wie Quadrizeps und Gesäßmuskulatur involviert sind, jedoch die Bewegung durch die Maschine unterstützt wird.",
+        "scale": 3
+      },
       "machine_specific_tips": "Diese Gym80 Beinpresse bietet eine besonders ergonomische Sitzposition, die den Druck auf deinen unteren Rücken minimiert. Achte darauf, die Sitzposition so einzustellen, dass deine Knie in der Ausgangsposition einen Winkel von etwa 90° haben.",
       "safety_tips": "Achte darauf, deinen Rücken während der gesamten Übung fest gegen die Rückenlehne zu drücken, um eine Überbelastung deiner Lendenwirbelsäule zu vermeiden. Es wird empfohlen, die Sicherheitsstopps des Geräts zu verwenden, um eine Überstreckung zu verhindern.",
       "modifications": [
@@ -51,11 +55,11 @@
       "machine_name": "Gym80 Latziehen",
       "muscle_groups": {
         "primary": [
-          "Latissimus dorsi",
-          "Bizeps"
+          "Back",
+          "Biceps"
         ],
         "secondary": [
-          "Schultern"
+          "Front Delts"
         ]
       },
       "movement_description": "Setze dich an die Gym80 Latziehmaschine und greife die Stange breit mit deinen Händen. Fixiere deine Beine unter den Polstern und lehne deinen Rücken leicht nach hinten. Ziehe die Stange kontrolliert bis zu deiner oberen Brust und lasse die Stange langsam wieder nach oben gleiten, bis deine Arme fast gestreckt sind.",
@@ -79,6 +83,10 @@
           "Ellenbogen"
         ]
       },
+      "systemic_stress": {
+        "description": "Latziehen hat eine niedrige bis moderate systematische Belastung, da die Übung hauptsächlich den oberen Rücken und die Arme beansprucht und wenig Auswirkung auf das Zentralnervensystem hat.",
+        "scale": 2
+      },
       "machine_specific_tips": "Diese Gym80 Latziehmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe so einzustellen, dass du eine stabile Position hast und deine Schultern nicht hochgezogen werden.",
       "safety_tips": "Achte darauf, deinen Rücken während der gesamten Übung stabil zu halten und vermeide es, zu weit nach hinten zu lehnen. Ziehe die Stange kontrolliert und vermeide ruckartige Bewegungen.",
       "modifications": [
@@ -96,11 +104,11 @@
       "machine_name": "Gym80 Schulterdrücken",
       "muscle_groups": {
         "primary": [
-          "Schultern",
-          "Trizeps"
+          "Front Delts",
+          "Triceps"
         ],
         "secondary": [
-          "Nacken"
+          "Traps"
         ]
       },
       "movement_description": "Setze dich auf die Gym80 Schulterdrückmaschine und halte die Griffe auf Schulterhöhe. Deine Handflächen zeigen nach vorne. Drücke die Griffe nach oben, bis deine Arme fast vollständig gestreckt sind, und senke sie dann kontrolliert zurück auf Schulterhöhe.",
@@ -124,6 +132,10 @@
           "Ellenbogen"
         ]
       },
+      "systemic_stress": {
+        "description": "Schulterdrücken auf der Maschine hat eine moderate systematische Belastung, da die Schulter- und Trizepsmuskulatur intensiv arbeiten muss, obwohl die Maschine Stabilität bietet.",
+        "scale": 3
+      },
       "machine_specific_tips": "Diese Gym80 Schulterdrückmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe so einzustellen, dass die Griffe auf Schulterhöhe beginnen.",
       "safety_tips": "Achte darauf, deinen Rücken fest gegen die Lehne zu drücken und vermeide es, ins Hohlkreuz zu fallen. Kontrolliere die Bewegung, um Verletzungen zu vermeiden.",
       "modifications": [
@@ -141,7 +153,7 @@
       "machine_name": "Gym80 Beinstrecker",
       "muscle_groups": {
         "primary": [
-          "Quadrizeps"
+          "Quad"
         ],
         "secondary": []
       },
@@ -164,6 +176,10 @@
         "affected_joints": [
           "Knie"
         ]
+      },
+      "systemic_stress": {
+        "description": "Der Beinstrecker hat eine niedrige systematische Belastung, da die Übung isoliert den Quadrizeps beansprucht und wenig Einfluss auf das Zentralnervensystem hat.",
+        "scale": 1
       },
       "machine_specific_tips": "Diese Gym80 Beinstreckmaschine bietet eine verstellbare Sitzposition. Achte darauf, die Sitzhöhe und das Polster so einzustellen, dass deine Knie in der richtigen Position sind.",
       "safety_tips": "Achte darauf, das Gewicht kontrolliert zu heben und zu senken, um eine Überlastung der Kniegelenke zu vermeiden.",

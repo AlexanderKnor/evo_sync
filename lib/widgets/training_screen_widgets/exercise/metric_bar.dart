@@ -64,7 +64,7 @@ class MetricBar extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          '${value.toStringAsFixed(1)} / 5', // Zeigt den genauen Wert an
+          '${value.toInt()} / 5', // Zeigt den genauen Wert als ganze Zahl an
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
           ),

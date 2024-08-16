@@ -8,6 +8,7 @@ class Exercise {
   final String type;
   final Map<String, dynamic> difficultyLevel;
   final Map<String, dynamic> jointStress;
+  final Map<String, dynamic> systemicStress;
   final String machineSpecificTips;
   final String safetyTips;
   final List<String> modifications;
@@ -22,6 +23,7 @@ class Exercise {
     required this.type,
     required this.difficultyLevel,
     required this.jointStress,
+    required this.systemicStress,
     required this.machineSpecificTips,
     required this.safetyTips,
     required this.modifications,
@@ -46,6 +48,8 @@ class Exercise {
             'description': 'Keine Beschreibung',
             'affected_joints': []
           },
+      systemicStress: json['systemic_stress'] ??
+          {'scale': 0, 'description': 'Keine Beschreibung'},
       machineSpecificTips:
           json['machine_specific_tips'] ?? 'Keine Tipps verfügbar',
       safetyTips: json['safety_tips'] ?? 'Keine Sicherheitshinweise verfügbar',
