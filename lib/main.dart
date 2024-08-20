@@ -47,8 +47,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const TrainingScreen(),
     const NutritionScreen(),
-    const ProfileScreen(),
-    const SettingsScreen(),
+    ProfileScreen(),
+    SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {

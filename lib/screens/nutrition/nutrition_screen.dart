@@ -12,7 +12,6 @@ class NutritionScreen extends StatefulWidget {
   const NutritionScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _NutritionScreenState createState() => _NutritionScreenState();
 }
 
@@ -54,12 +53,11 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final darkModeNotifier = Provider.of<DarkModeNotifier>(context);
-    final isDarkMode = darkModeNotifier.themeMode == ThemeMode.dark;
+    Provider.of<DarkModeNotifier>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

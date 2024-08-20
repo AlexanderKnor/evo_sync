@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:evosync/widgets/generic/rotating_letters.dart'; // Passe den Pfad entsprechend an
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profil'),
+        title: Text('Settings'),
       ),
-      body: const Center(
-        child: Text(
-          'Profil Screen',
-          style: TextStyle(fontSize: 24),
+      body: Center(
+        child: RotatingLetters(
+          text: 'evosync',
+          isDarkMode: isDarkMode,
         ),
       ),
     );
