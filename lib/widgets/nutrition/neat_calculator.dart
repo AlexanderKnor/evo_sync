@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pedometer/pedometer.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:evosync/theme/dark_mode_notifier.dart';
 import 'package:evosync/widgets/generic/custom_number_input_screen.dart';
@@ -14,20 +16,48 @@ class NeatCalculator extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _NeatCalculatorState createState() => _NeatCalculatorState();
 }
 
 class _NeatCalculatorState extends State<NeatCalculator> {
   int _steps = 0;
   double _neat = 0;
+  late Stream<StepCount> _stepCountStream;
 
   @override
-  void didUpdateWidget(NeatCalculator oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.gewicht != widget.gewicht) {
-      _calculateNeat();
+  void initState() {
+    super.initState();
+    _requestPermissions();
+  }
+
+  void _requestPermissions() async {
+    // Berechtigung für Schrittzähler anfragen
+    var status = await Permission.activityRecognition.status;
+    if (status.isDenied) {
+      status = await Permission.activityRecognition.request();
     }
+
+    if (status.isGranted) {
+      _initPedometer();
+    } else {
+      print("Berechtigung für Aktivitätserkennung abgelehnt");
+    }
+  }
+
+  void _initPedometer() {
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(_onStepCount).onError(_onStepCountError);
+  }
+
+  void _onStepCount(StepCount event) {
+    setState(() {
+      _steps = event.steps;
+    });
+    _calculateNeat();
+  }
+
+  void _onStepCountError(error) {
+    print('Pedometer Error: $error');
   }
 
   void _calculateNeat() {
@@ -43,7 +73,6 @@ class _NeatCalculatorState extends State<NeatCalculator> {
       setState(() {
         _neat = calculatedNeat;
       });
-
       widget.onNeatCalculated(_neat);
     }
   }

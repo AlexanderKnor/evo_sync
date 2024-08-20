@@ -34,6 +34,12 @@ dependencies:
   # Cupertino Icons für iOS-Stil-Symbole
   cupertino_icons: ^1.0.2
 
+  # Schritte vom Smartphone verwenden 
+  pedometer: ^4.0.2
+
+  # Verwaltung von Berechtigungen
+  permission_handler: ^10.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
