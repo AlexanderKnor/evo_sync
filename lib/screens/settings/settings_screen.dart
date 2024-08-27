@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:evosync/widgets/generic/rotating_letters.dart'; // Passe den Pfad entsprechend an
+import 'package:evosync/widgets/generic/rotating_letters.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override

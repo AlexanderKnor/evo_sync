@@ -23,6 +23,8 @@ class _NeatCalculatorState extends State<NeatCalculator> {
   int _steps = 0;
   double _neat = 0;
   late Stream<StepCount> _stepCountStream;
+  bool _isRequestingPermission =
+      false; // Variable zum Überwachen von Berechtigungsanfragen
 
   @override
   void initState() {
@@ -31,9 +33,13 @@ class _NeatCalculatorState extends State<NeatCalculator> {
   }
 
   void _requestPermissions() async {
+    if (_isRequestingPermission) return;
+
+    _isRequestingPermission = true;
+
     // Berechtigung für Schrittzähler anfragen
     var status = await Permission.activityRecognition.status;
-    if (status.isDenied) {
+    if (status.isDenied || status.isRestricted) {
       status = await Permission.activityRecognition.request();
     }
 
@@ -42,6 +48,8 @@ class _NeatCalculatorState extends State<NeatCalculator> {
     } else {
       print("Berechtigung für Aktivitätserkennung abgelehnt");
     }
+
+    _isRequestingPermission = false; // Anfrage abgeschlossen
   }
 
   void _initPedometer() {

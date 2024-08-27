@@ -1,0 +1,226 @@
+{
+  "questions": [
+    {
+      "question": "Wie lange trainierst du regelmäßig?",
+      "options": [
+        {
+          "value": 1,
+          "description": "Weniger als 6 Monate"
+        },
+        {
+          "value": 2,
+          "description": "6 Monate bis 2 Jahre"
+        },
+        {
+          "value": 3,
+          "description": "2 bis 5 Jahre"
+        },
+        {
+          "value": 4,
+          "description": "5 bis 10 Jahre"
+        },
+        {
+          "value": 5,
+          "description": "Mehr als 10 Jahre"
+        }
+      ]
+    },
+    {
+      "question": "Wie oft pro Woche trainierst du derzeit?",
+      "options": [
+        {
+          "value": 1,
+          "description": "1 Mal pro Woche oder weniger"
+        },
+        {
+          "value": 2,
+          "description": "2 bis 3 Mal pro Woche"
+        },
+        {
+          "value": 3,
+          "description": "4 bis 5 Mal pro Woche"
+        },
+        {
+          "value": 4,
+          "description": "6 Mal pro Woche"
+        },
+        {
+          "value": 5,
+          "description": "7 Mal oder öfter pro Woche"
+        }
+      ]
+    },
+    {
+      "question": "Wie lange dauert eine typische Trainingseinheit bei dir?",
+      "options": [
+        {
+          "value": 1,
+          "description": "Weniger als 30 Minuten"
+        },
+        {
+          "value": 2,
+          "description": "30 bis 45 Minuten"
+        },
+        {
+          "value": 3,
+          "description": "45 bis 60 Minuten"
+        },
+        {
+          "value": 4,
+          "description": "60 bis 90 Minuten"
+        },
+        {
+          "value": 5,
+          "description": "Mehr als 90 Minuten"
+        }
+      ]
+    },
+    {
+      "question": "Wie systematisch verfolgst und dokumentierst du dein Training, einschließlich Fortschritte, Leistungsdaten und Anpassungen?",
+      "options": [
+        {
+          "value": 1,
+          "description": "Gar nicht - Ich verfolge oder dokumentiere mein Training überhaupt nicht."
+        },
+        {
+          "value": 2,
+          "description": "Selten - Ich mache nur gelegentlich Notizen oder verfolge mein Training unregelmäßig."
+        },
+        {
+          "value": 3,
+          "description": "Manchmal - Ich dokumentiere mein Training, aber nicht immer systematisch."
+        },
+        {
+          "value": 4,
+          "description": "Regelmäßig - Ich verfolge mein Training regelmäßig und mache oft Notizen zu Fortschritten und Anpassungen."
+        },
+        {
+          "value": 5,
+          "description": "Sehr systematisch - Ich dokumentiere jedes Training detailliert, einschließlich Fortschritte, Leistungsdaten und regelmäßiger Anpassungen."
+        }
+      ]
+    },
+    {
+      "question": "Wie oft musst du dein Trainingsprogramm anpassen, um Fortschritte zu erzielen?",
+      "options": [
+        {
+          "value": 1,
+          "description": "Seltener als alle 6 Monate"
+        },
+        {
+          "value": 2,
+          "description": "Alle 3 bis 6 Monate"
+        },
+        {
+          "value": 3,
+          "description": "Alle 1 bis 3 Monate"
+        },
+        {
+          "value": 4,
+          "description": "Alle 2 bis 4 Wochen"
+        },
+        {
+          "value": 5,
+          "description": "Wöchentlich oder öfter"
+        }
+      ]
+    },
+    {
+      "question": "Wie lange dauert es, bis du dich von einer intensiven Trainingseinheit vollständig erholt hast?",
+      "options": [
+        {
+          "value": 1,
+          "description": "Weniger als 24 Stunden"
+        },
+        {
+          "value": 2,
+          "description": "24 bis 36 Stunden"
+        },
+        {
+          "value": 3,
+          "description": "36 bis 48 Stunden"
+        },
+        {
+          "value": 4,
+          "description": "48 bis 72 Stunden"
+        },
+        {
+          "value": 5,
+          "description": "Mehr als 72 Stunden"
+        }
+      ]
+    },
+    {
+      "question": "Wie oft erzielst du noch signifikante Fortschritte (z.B. Steigerung der Gewichte, bessere Zeiten, etc.)?",
+      "options": [
+        {
+          "value": 1,
+          "description": "Wöchentlich"
+        },
+        {
+          "value": 2,
+          "description": "Alle 2 Wochen"
+        },
+        {
+          "value": 3,
+          "description": "Monatlich"
+        },
+        {
+          "value": 4,
+          "description": "Alle 2 bis 3 Monate"
+        },
+        {
+          "value": 5,
+          "description": "Seltener als alle 3 Monate"
+        }
+      ]
+    },
+    {
+      "question": "Wie würdest du dein aktuelles Leistungsniveau im Vergleich zu anderen einschätzen?",
+      "options": [
+        {
+          "value": 1,
+          "description": "Deutlich unter dem Durchschnitt"
+        },
+        {
+          "value": 2,
+          "description": "Unter dem Durchschnitt"
+        },
+        {
+          "value": 3,
+          "description": "Durchschnittlich"
+        },
+        {
+          "value": 4,
+          "description": "Überdurchschnittlich"
+        },
+        {
+          "value": 5,
+          "description": "Spitzenklasse"
+        }
+      ]
+    }
+  ],
+  "evaluation": {
+    "Novice": {
+      "min": 7,
+      "max": 14
+    },
+    "Beginner": {
+      "min": 15,
+      "max": 21
+    },
+    "Intermediate": {
+      "min": 22,
+      "max": 28
+    },
+    "Advanced": {
+      "min": 29,
+      "max": 35
+    },
+    "Very Advanced": {
+      "min": 36,
+      "max": 40
+    }
+  }
+}

@@ -17,7 +17,7 @@ dependencies:
     sdk: flutter
 
   # Speichern von Benutzereinstellungen, z.B. Dark Mode
-  shared_preferences: ^2.0.13
+  shared_preferences: ^2.3.2
   
   # Arbeiten mit Datums- und Zeitformaten
   intl: ^0.19.0
@@ -40,6 +40,15 @@ dependencies:
   # Verwaltung von Berechtigungen
   permission_handler: ^10.0.0
 
+  # SQLite für die lokale Datenbankverwaltung
+  sqflite: ^2.0.0
+  
+  # Pfadmanagement, um Dateipfade plattformübergreifend zu handhaben
+  path: ^1.8.0
+  
+  # Pfad-Provider, um Verzeichnisse wie das Dokumentenverzeichnis zu finden
+  path_provider: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,6 +64,8 @@ flutter:
     - assets/database/Index_exercises.json
     - assets/database/exercises/
     - assets/database/sportarten_met.json
+    - assets/database/training_volumes.json
+    - assets/database/fragenkatalog_experience.json
 
   # Weitere Informationen zum Hinzufügen von Assets aus Paketabhängigkeiten findest du unter
   # https://flutter.dev/assets-and-images/#from-packages

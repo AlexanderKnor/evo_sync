@@ -8,6 +8,7 @@ import 'package:evosync/widgets/training/create_plan_button.dart';
 import 'package:evosync/widgets/generic/theme_toggle_button.dart';
 import 'package:evosync/screens/training/exercise_list_screen.dart';
 import 'package:evosync/widgets/generic/custom_slide_transition.dart';
+import 'package:evosync/screens/training/Plangenerator/profile_data_screen.dart'; // Importiere den Profil-Data-Screen
 
 class TrainingScreen extends StatefulWidget {
   const TrainingScreen({super.key});
@@ -141,7 +142,12 @@ class _TrainingScreenState extends State<TrainingScreen>
                       children: [
                         CreatePlanButton(
                           onPressed: () {
-                            // Logik für "Plan oder Workout erstellen"
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProfileDataScreen()), // Navigiere zum ProfileDataScreen
+                            );
                           },
                         ),
                         const SizedBox(height: 16),
