@@ -6,7 +6,8 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
   final int volumePerDay;
   final double selectedDuration; // In Sekunden
   final String trainingExperience;
-  final List<dynamic> muscleGroups; // Hinzugefügt
+  final List<dynamic> muscleGroups;
+  final Map<String, String> selection;
 
   TrainingPlanSettingsScreen({
     required this.volumeType,
@@ -14,23 +15,33 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
     required this.trainingFrequency,
     required this.selectedDuration,
     required this.trainingExperience,
-    required this.muscleGroups, // Hinzugefügt
+    required this.muscleGroups,
+    required this.selection,
   });
 
   Map<String, double> _getRelativeVolumeProportion() {
     Map<String, double> relativeProportions = {};
 
-    int totalMinVolume = 0;
-    int totalMaxVolume = 0;
-
     for (var muscleGroup in muscleGroups) {
-      int minVolume = muscleGroup['mav']['min'];
-      int maxVolume = muscleGroup['mav']['max'];
+      String muscleName = muscleGroup['name'];
+      int minVolume;
+      int maxVolume;
 
-      totalMinVolume += minVolume;
-      totalMaxVolume += maxVolume;
+      switch (selection[muscleName]) {
+        case 'Fokussieren':
+          minVolume = muscleGroup['mav']['max'];
+          maxVolume = muscleGroup['mrv']['min'];
+          break;
+        case 'Vernachlässigen':
+          minVolume = muscleGroup['mev']['min'];
+          maxVolume = muscleGroup['mev']['max'];
+          break;
+        default: // 'Normal'
+          minVolume = muscleGroup['mav']['min'];
+          maxVolume = muscleGroup['mav']['max'];
+      }
 
-      relativeProportions[muscleGroup['name']] = (minVolume + maxVolume) / 2.0;
+      relativeProportions[muscleName] = (minVolume + maxVolume) / 2.0;
     }
 
     double totalVolume = relativeProportions.values.reduce((a, b) => a + b);
@@ -96,7 +107,7 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Nächste Aktion, z.B. Speichern des Trainingsplans
+                  // Aktion zum Speichern des Trainingsplans
                 },
                 icon: Icon(Icons.save, size: 24),
                 label: Text('Plan Speichern'),

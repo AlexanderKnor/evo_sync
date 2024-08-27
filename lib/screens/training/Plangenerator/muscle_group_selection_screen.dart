@@ -33,6 +33,19 @@ class _MuscleGroupSelectionScreenState
   }
 
   void _navigateToTrainingPlanSettings() {
+    // Bereite die Auswahl für den nächsten Bildschirm vor
+    Map<String, String> selection = {};
+    muscleGroups.forEach((muscleGroup) {
+      String muscleName = muscleGroup['name'];
+      if (focusedMuscleGroups[muscleName] == true) {
+        selection[muscleName] = 'Fokussieren';
+      } else if (neglectedMuscleGroups[muscleName] == true) {
+        selection[muscleName] = 'Vernachlässigen';
+      } else {
+        selection[muscleName] = 'Normal';
+      }
+    });
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -42,7 +55,8 @@ class _MuscleGroupSelectionScreenState
           trainingFrequency: widget.trainingFrequency,
           selectedDuration: widget.selectedDuration,
           trainingExperience: widget.trainingExperience,
-          muscleGroups: muscleGroups, // Muskelgruppen übergeben
+          muscleGroups: muscleGroups,
+          selection: selection,
         ),
       ),
     );
