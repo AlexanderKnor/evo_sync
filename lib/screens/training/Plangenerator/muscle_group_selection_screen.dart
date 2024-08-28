@@ -22,27 +22,35 @@ class MuscleGroupSelectionScreen extends StatefulWidget {
 
 class _MuscleGroupSelectionScreenState
     extends State<MuscleGroupSelectionScreen> {
-  Map<String, bool> focusedMuscleGroups = {};
-  Map<String, bool> neglectedMuscleGroups = {};
-  late List<dynamic> muscleGroups;
+  // Map zum Speichern der Schiebereglerwerte für jede Muskelgruppe
+  Map<String, double> muscleSliderValues = {};
 
   @override
   void initState() {
     super.initState();
-    muscleGroups = widget.muscleGroups; // Muskelgruppen laden
+    // Initialisieren der Schiebereglerwerte für jede Muskelgruppe auf 0,5 (Mitte)
+    for (var muscleGroup in widget.muscleGroups) {
+      muscleSliderValues[muscleGroup['name']] = 0.5;
+    }
   }
 
   void _navigateToTrainingPlanSettings() {
-    // Bereite die Auswahl für den nächsten Bildschirm vor
+    // Vorbereiten der Auswahl für den nächsten Bildschirm
     Map<String, String> selection = {};
-    muscleGroups.forEach((muscleGroup) {
+    widget.muscleGroups.forEach((muscleGroup) {
       String muscleName = muscleGroup['name'];
-      if (focusedMuscleGroups[muscleName] == true) {
+      double sliderValue = muscleSliderValues[muscleName] ?? 0.5;
+
+      if (sliderValue == 1.0) {
         selection[muscleName] = 'Fokussieren';
-      } else if (neglectedMuscleGroups[muscleName] == true) {
-        selection[muscleName] = 'Vernachlässigen';
-      } else {
+      } else if (sliderValue == 0.75) {
+        selection[muscleName] = 'Etwas Fokussieren';
+      } else if (sliderValue == 0.5) {
         selection[muscleName] = 'Normal';
+      } else if (sliderValue == 0.25) {
+        selection[muscleName] = 'Vernachlässigen';
+      } else if (sliderValue == 0.0) {
+        selection[muscleName] = 'Nicht Trainieren';
       }
     });
 
@@ -55,7 +63,7 @@ class _MuscleGroupSelectionScreenState
           trainingFrequency: widget.trainingFrequency,
           selectedDuration: widget.selectedDuration,
           trainingExperience: widget.trainingExperience,
-          muscleGroups: muscleGroups,
+          muscleGroups: widget.muscleGroups,
           selection: selection,
         ),
       ),
@@ -66,15 +74,16 @@ class _MuscleGroupSelectionScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Muskelgruppen Auswahl'),
+        title: const Text('Muskelgruppen Priorisieren'),
       ),
-      body: muscleGroups.isEmpty
+      body: widget.muscleGroups.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
-              itemCount: muscleGroups.length,
+              itemCount: widget.muscleGroups.length,
               itemBuilder: (context, index) {
-                final muscleGroup = muscleGroups[index];
+                final muscleGroup = widget.muscleGroups[index];
                 final muscleName = muscleGroup['name'];
+                final sliderValue = muscleSliderValues[muscleName] ?? 0.5;
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -87,34 +96,25 @@ class _MuscleGroupSelectionScreenState
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: focusedMuscleGroups[muscleName] ?? false,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                focusedMuscleGroups[muscleName] = value!;
-                                if (value) {
-                                  neglectedMuscleGroups[muscleName] = false;
-                                }
-                              });
-                            },
-                          ),
-                          const Text('Fokussieren'),
-                          const Spacer(),
-                          Checkbox(
-                            value: neglectedMuscleGroups[muscleName] ?? false,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                neglectedMuscleGroups[muscleName] = value!;
-                                if (value) {
-                                  focusedMuscleGroups[muscleName] = false;
-                                }
-                              });
-                            },
-                          ),
-                          const Text('Vernachlässigen'),
-                        ],
+                      Slider(
+                        value: sliderValue,
+                        min: 0.0,
+                        max: 1.0,
+                        divisions: 4, // Positionen: 0, 0.25, 0.5, 0.75, 1.0
+                        label: sliderValue == 1.0
+                            ? 'Fokussieren'
+                            : sliderValue == 0.75
+                                ? 'Etwas Fokussieren'
+                                : sliderValue == 0.5
+                                    ? 'Normal'
+                                    : sliderValue == 0.25
+                                        ? 'Vernachlässigen'
+                                        : 'Nicht Trainieren',
+                        onChanged: (newValue) {
+                          setState(() {
+                            muscleSliderValues[muscleName] = newValue;
+                          });
+                        },
                       ),
                     ],
                   ),

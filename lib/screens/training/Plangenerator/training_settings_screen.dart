@@ -19,26 +19,36 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
     required this.selection,
   });
 
+  // Method to calculate the relative volume proportions
   Map<String, double> _getRelativeVolumeProportion() {
     Map<String, double> relativeProportions = {};
 
     for (var muscleGroup in muscleGroups) {
       String muscleName = muscleGroup['name'];
-      int minVolume;
-      int maxVolume;
+      int minVolume = 0;
+      int maxVolume = 0;
 
       switch (selection[muscleName]) {
         case 'Fokussieren':
           minVolume = muscleGroup['mav']['max'];
           maxVolume = muscleGroup['mrv']['min'];
           break;
-        case 'Vernachlässigen':
-          minVolume = muscleGroup['mev']['min'];
-          maxVolume = muscleGroup['mev']['max'];
+        case 'Etwas Fokussieren':
+          minVolume = muscleGroup['mav']['min'];
+          maxVolume = muscleGroup['mrv']['min'];
           break;
-        default: // 'Normal'
+        case 'Normal':
           minVolume = muscleGroup['mav']['min'];
           maxVolume = muscleGroup['mav']['max'];
+          break;
+        case 'Vernachlässigen':
+          minVolume = muscleGroup['mev']['max'];
+          maxVolume = muscleGroup['mev']['min'];
+          break;
+        case 'Nicht Trainieren':
+          minVolume = 0;
+          maxVolume = 0;
+          break;
       }
 
       relativeProportions[muscleName] = (minVolume + maxVolume) / 2.0;
@@ -52,6 +62,7 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
     return relativeProportions;
   }
 
+  // Method to calculate daily volume distribution
   Map<String, int> _calculateDailyVolumeDistribution() {
     Map<String, int> dailyVolumeDistribution = {};
 
@@ -70,6 +81,7 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
     return dailyVolumeDistribution;
   }
 
+  // Method to calculate total volume distribution for the week
   Map<String, int> _calculateTotalVolumeDistribution(
       Map<String, int> dailyVolumeDistribution) {
     Map<String, int> totalVolumeDistribution = {};
@@ -81,27 +93,61 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
     return totalVolumeDistribution;
   }
 
+  // Method to calculate the volume per training day
+  Map<String, String> _calculateVolumePerTrainingDay(
+      Map<String, int> totalVolumeDistribution) {
+    Map<String, String> volumePerTrainingDay = {};
+
+    for (var muscleGroup in muscleGroups) {
+      String muscleName = muscleGroup['name'];
+      int totalVolume = totalVolumeDistribution[muscleName] ?? 0;
+      int frequencyMin = muscleGroup['frequency']['min'].round();
+      int frequencyMax = muscleGroup['frequency']['max'].round();
+
+      int minVolumePerDay = (totalVolume / frequencyMax).ceil();
+      int maxVolumePerDay = (totalVolume / frequencyMin).ceil();
+
+      volumePerTrainingDay[muscleName] =
+          '$minVolumePerDay - $maxVolumePerDay Sätze/Tag';
+    }
+
+    return volumePerTrainingDay;
+  }
+
   @override
   Widget build(BuildContext context) {
     Map<String, int> dailyVolumeDistribution =
         _calculateDailyVolumeDistribution();
     Map<String, int> totalVolumeDistribution =
         _calculateTotalVolumeDistribution(dailyVolumeDistribution);
+    Map<String, String> volumePerTrainingDay =
+        _calculateVolumePerTrainingDay(totalVolumeDistribution);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Trainingsplan Einstellungen'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Gesamtes Volumen pro Muskelgruppe:',
+            Text('Volumen und Frequenz pro Muskelgruppe:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
-            ...totalVolumeDistribution.entries.map((entry) {
-              return Text('${entry.key}: ${entry.value} Sätze');
+            ...muscleGroups.map((muscleGroup) {
+              final muscleName = muscleGroup['name'];
+              final totalVolume = totalVolumeDistribution[muscleName] ?? 0;
+              final frequencyMin = muscleGroup['frequency']['min'];
+              final frequencyMax = muscleGroup['frequency']['max'];
+              final dailyVolume = volumePerTrainingDay[muscleName];
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                    '$muscleName: $totalVolume Sätze/Woche (Frequenz: $frequencyMin - $frequencyMax x/Woche, $dailyVolume)',
+                    style: TextStyle(fontSize: 16)),
+              );
             }).toList(),
             SizedBox(height: 20),
             Center(

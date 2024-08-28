@@ -66,6 +66,7 @@ flutter:
     - assets/database/sportarten_met.json
     - assets/database/training_volumes.json
     - assets/database/fragenkatalog_experience.json
+    - assets/database/Splits_Default.json
 
   # Weitere Informationen zum Hinzufügen von Assets aus Paketabhängigkeiten findest du unter
   # https://flutter.dev/assets-and-images/#from-packages
