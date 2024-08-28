@@ -49,6 +49,9 @@ dependencies:
   # Pfad-Provider, um Verzeichnisse wie das Dokumentenverzeichnis zu finden
   path_provider: ^2.0.0
 
+  # Um Svg Dateien zu verwenden
+  flutter_svg: ^2.0.10+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -67,6 +70,10 @@ flutter:
     - assets/database/training_volumes.json
     - assets/database/fragenkatalog_experience.json
     - assets/database/Splits_Default.json
+    - assets/male_backside.svg
+    - assets/male_frontside.svg
+    - assets/female_backside.svg
+    - assets/female_frontside.svg
 
   # Weitere Informationen zum Hinzufügen von Assets aus Paketabhängigkeiten findest du unter
   # https://flutter.dev/assets-and-images/#from-packages
