@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
+import 'package:evosync/models/profile.dart';
+import 'package:evosync/database_helper.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -10,73 +12,139 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  String _svgString = '';
-  String _selectedGroup = 'Group 1'; // Default selected group
+  final DatabaseHelper _dbHelper = DatabaseHelper();
+  Profile? userProfile;
 
-  final Map<String, List<String>> _groupedIds = {
-    "Group 1": ['_x30_5', '_x33_1'],
-    "Group 2": ['_x30_7', '_x33_3'],
-    "Group 3": ['_x30_6', '_x33_2'],
-  };
+  String _svgFrontsideString = '';
+  String _svgBacksideString = '';
+  bool _isSwapped = false;
 
-  // Map to store the slider value (color) for each group, initialized at 2 (middle position)
-  Map<String, int> _sliderValues = {};
+  late Map<String, List<String>> _frontsideGroupedIds;
+  late Map<String, List<String>> _backsideGroupedIds;
+
+  // Separate Maps für Vorder- und Rückseite
+  late Map<String, int> _frontsideSliderValues;
+  late Map<String, int> _backsideSliderValues;
+  late Map<String, int> _currentSliderValues;
 
   @override
   void initState() {
     super.initState();
-    _loadSvg();
-    // Initialize slider values to 2 (middle position) for each group
-    _sliderValues = {
-      for (var group in _groupedIds.keys) group: 2,
-    };
+    _loadProfile();
   }
 
-  Future<void> _loadSvg() async {
-    String svgString =
-        await rootBundle.loadString('assets/female_frontside.svg');
-    setState(() {
-      _svgString = svgString;
-    });
-  }
-
-  // Generate color based on the slider value
-  Color _colorFromValue(int value) {
-    switch (value) {
-      case 0:
-        return const Color.fromARGB(255, 0, 208, 255); // "Nicht trainieren"
-      case 1:
-        return const Color.fromARGB(255, 192, 242, 255); // "Vernachlässigen"
-      case 2:
-        return Colors.white; // "Normal"
-      case 3:
-        return const Color.fromARGB(255, 252, 121, 121); // "Etwas fokussieren"
-      case 4:
-        return const Color.fromARGB(255, 255, 3, 3); // "Fokussieren"
-      default:
-        return Colors.white; // Default to "Normal"
+  Future<void> _loadProfile() async {
+    List<Profile> profiles = await _dbHelper.getProfiles();
+    if (profiles.isNotEmpty) {
+      setState(() {
+        userProfile = profiles.first;
+        print('Loaded Profile: $userProfile');
+        _initializeSettings();
+      });
     }
   }
 
-  // Update the SVG with the colors based on current slider values
-  String _updateSvgColors(String svgString, Map<String, Color> colors) {
-    for (var group in _groupedIds.values) {
-      for (var id in group) {
-        final color = colors[id]!;
-        final hexColor = color.value
-            .toRadixString(16)
-            .substring(2); // Ignoring the alpha value
+  void _initializeSettings() async {
+    if (userProfile != null) {
+      final String gender = userProfile!.gender.toLowerCase();
+      if (gender == 'weiblich') {
+        _frontsideGroupedIds = {
+          "Gruppe 1": ['_x30_5', '_x33_1'],
+          "Gruppe 2": ['_x30_7', '_x33_3'],
+          "Gruppe 3": ['_x30_6', '_x33_2'],
+        };
+        _backsideGroupedIds = {
+          "Gruppe 1": ['_x31_2', '_x33_5'],
+          "Gruppe 2": ['_x34_6', '_x32_3'],
+          "Gruppe 3": ['_x34_3', '_x32_0'],
+        };
+        _svgFrontsideString =
+            await rootBundle.loadString('assets/images/female_frontside.svg');
+        _svgBacksideString =
+            await rootBundle.loadString('assets/images/female_backside.svg');
+      } else if (gender == 'männlich') {
+        _frontsideGroupedIds = {
+          "Gruppe 1": ['_x35_2', '_x32_6'],
+          "Gruppe 2": ['_x33_2', '_x30_6'],
+          "Gruppe 3": ['_x33_1', '_x30_5'],
+        };
+        _backsideGroupedIds = {
+          "Gruppe 1": ['_x33_6', '_x31_5'],
+          "Gruppe 2": ['_x34_1', '_x32_0'],
+          "Gruppe 3": ['_x34_2', '_x32_1'],
+        };
+        _svgFrontsideString =
+            await rootBundle.loadString('assets/images/male_frontside.svg');
+        _svgBacksideString =
+            await rootBundle.loadString('assets/images/male_backside.svg');
+      }
 
-        final regex =
-            RegExp(r'(<path[^>]*id="' + id + r'"[^>]*fill=")[^"]+(")');
-        svgString = svgString.replaceFirst(regex,
-            '${regex.firstMatch(svgString)?.group(1)}#$hexColor${regex.firstMatch(svgString)?.group(2)}');
+      _initializeSliderValues();
+      setState(() {});
+    }
+  }
+
+  void _initializeSliderValues() {
+    // Standardwerte für die Slider-Einstellungen der Vorderseite
+    _frontsideSliderValues = {
+      for (var group in _frontsideGroupedIds.keys) group: 2,
+    };
+    // Standardwerte für die Slider-Einstellungen der Rückseite
+    _backsideSliderValues = {
+      for (var group in _backsideGroupedIds.keys) group: 2,
+    };
+    // Aktuelle Slider-Einstellungen setzen
+    _currentSliderValues = _frontsideSliderValues;
+  }
+
+  void _swapSvgs() {
+    setState(() {
+      _isSwapped = !_isSwapped;
+      if (_isSwapped) {
+        _currentSliderValues = _backsideSliderValues;
+      } else {
+        _currentSliderValues = _frontsideSliderValues;
+      }
+    });
+  }
+
+  Color _colorFromValue(int value) {
+    switch (value) {
+      case 0:
+        return const Color.fromARGB(255, 128, 128, 128);
+      case 1:
+        return const Color.fromARGB(255, 189, 189, 189);
+      case 2:
+        return const Color.fromARGB(255, 255, 255, 255);
+      case 3:
+        return const Color.fromARGB(255, 222, 253, 255);
+      case 4:
+        return const Color.fromARGB(255, 190, 251, 255);
+      default:
+        return Colors.white;
+    }
+  }
+
+  String _updateSvgColors(String svgString, Map<String, Color> colors,
+      Map<String, List<String>> groupedIds) {
+    for (var group in groupedIds.values) {
+      for (var id in group) {
+        final color = colors[id];
+        if (color != null) {
+          final hexColor = color.value.toRadixString(16).substring(2);
+
+          final regex =
+              RegExp(r'(<path[^>]*id="' + id + r'"[^>]*fill=")[^"]+(")');
+          svgString = svgString.replaceFirst(
+            regex,
+            '${regex.firstMatch(svgString)?.group(1)}#$hexColor${regex.firstMatch(svgString)?.group(2)}',
+          );
+        }
       }
     }
     return svgString;
   }
 
-  // Get text label based on slider value
   String _getLabelText(int value) {
     switch (value) {
       case 0:
@@ -97,66 +165,106 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (_svgString.isNotEmpty)
-            TweenAnimationBuilder<Color?>(
-              tween: ColorTween(
-                begin: Colors.white, // Initial color before animation
-                end: _colorFromValue(_sliderValues[_selectedGroup]!),
-              ),
-              duration: Duration(milliseconds: 500),
-              builder: (context, color, child) {
-                Map<String, Color> currentColors = {
-                  for (var group in _groupedIds.keys)
-                    for (var id in _groupedIds[group]!)
-                      id: group == _selectedGroup
-                          ? color!
-                          : _colorFromValue(_sliderValues[group]!)
-                };
-                return SvgPicture.string(
-                  _updateSvgColors(_svgString, currentColors),
-                  semanticsLabel: 'Female Frontside',
-                  height: 560.0,
-                );
-              },
+      body: _svgFrontsideString.isEmpty || _svgBacksideString.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 40.0),
+                      child: TweenAnimationBuilder<Color?>(
+                        tween: ColorTween(
+                          begin: Colors.white,
+                          end: Colors.white,
+                        ),
+                        duration: const Duration(milliseconds: 500),
+                        builder: (context, color, child) {
+                          Map<String, Color> currentColors = {
+                            for (var group in _currentSliderValues.keys)
+                              for (var id in (_isSwapped
+                                  ? _backsideGroupedIds
+                                  : _frontsideGroupedIds)[group]!)
+                                id: _colorFromValue(
+                                    _currentSliderValues[group]!)
+                          };
+                          return SvgPicture.string(
+                            _isSwapped
+                                ? _updateSvgColors(_svgBacksideString,
+                                    currentColors, _backsideGroupedIds)
+                                : _updateSvgColors(_svgFrontsideString,
+                                    currentColors, _frontsideGroupedIds),
+                            semanticsLabel: 'Frontside or Backside',
+                            height: 560.0,
+                          );
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        children: _currentSliderValues.keys.map((group) {
+                          return Column(
+                            children: [
+                              Text(
+                                group,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                _getLabelText(_currentSliderValues[group]!),
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              Slider(
+                                value: _currentSliderValues[group]!.toDouble(),
+                                min: 0,
+                                max: 4,
+                                divisions: 4,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _currentSliderValues[group] = value.round();
+                                  });
+                                },
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 60,
+                  right: 20,
+                  child: GestureDetector(
+                    onTap: _swapSvgs,
+                    child: SvgPicture.string(
+                      _isSwapped
+                          ? _updateSvgColors(
+                              _svgFrontsideString,
+                              {
+                                for (var group in _frontsideSliderValues.keys)
+                                  for (var id in _frontsideGroupedIds[group]!)
+                                    id: _colorFromValue(
+                                        _frontsideSliderValues[group]!)
+                              },
+                              _frontsideGroupedIds)
+                          : _updateSvgColors(
+                              _svgBacksideString,
+                              {
+                                for (var group in _backsideSliderValues.keys)
+                                  for (var id in _backsideGroupedIds[group]!)
+                                    id: _colorFromValue(
+                                        _backsideSliderValues[group]!)
+                              },
+                              _backsideGroupedIds),
+                      semanticsLabel: 'Frontside or Backside',
+                      width: 100.0,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          DropdownButton<String>(
-            value: _selectedGroup,
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedGroup = newValue!;
-              });
-            },
-            items:
-                _groupedIds.keys.map<DropdownMenuItem<String>>((String group) {
-              return DropdownMenuItem<String>(
-                value: group,
-                child: Text(group),
-              );
-            }).toList(),
-          ),
-          Text(
-            _getLabelText(_sliderValues[_selectedGroup]!),
-            style: TextStyle(fontSize: 18),
-          ),
-          Slider(
-            value: _sliderValues[_selectedGroup]!.toDouble(),
-            min: 0,
-            max: 4,
-            divisions: 4, // 5 positions
-            onChanged: (value) {
-              setState(() {
-                _sliderValues[_selectedGroup] = value.round();
-              });
-            },
-          ),
-        ],
-      ),
     );
   }
 }

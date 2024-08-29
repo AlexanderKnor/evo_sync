@@ -13,6 +13,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final DatabaseHelper _dbHelper = DatabaseHelper();
   Profile? userProfile;
 
+  final List<String> genderOptions = ['Männlich', 'Weiblich'];
+  final List<String> trainingExperienceOptions = [
+    'Novice',
+    'Beginner',
+    'Intermediate',
+    'Advanced',
+    'Very Advanced'
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +38,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _updateProfile() async {
+    if (userProfile != null) {
+      await _dbHelper.updateProfile(userProfile!);
+      print('Profile updated: $userProfile');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,33 +58,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileView() {
-    final String gender =
-        userProfile!.gender.isNotEmpty ? userProfile!.gender : 'Männlich';
-    final String trainingExperience = userProfile!.trainingExperience.isNotEmpty
-        ? userProfile!.trainingExperience
-        : 'Novice';
-    final double weight = userProfile!.weight;
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('Geschlecht'),
-          Text(
-            gender,
-            style: Theme.of(context).textTheme.bodyLarge,
+          DropdownButton<String>(
+            value: userProfile!.gender.isNotEmpty
+                ? userProfile!.gender
+                : genderOptions.first,
+            items: genderOptions.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  userProfile = userProfile!.copyWith(gender: newValue);
+                  _updateProfile();
+                });
+              }
+            },
           ),
           const SizedBox(height: 16),
           const Text('Trainingslevel'),
-          Text(
-            trainingExperience,
-            style: Theme.of(context).textTheme.bodyLarge,
+          DropdownButton<String>(
+            value: userProfile!.trainingExperience.isNotEmpty
+                ? userProfile!.trainingExperience
+                : trainingExperienceOptions.first,
+            items: trainingExperienceOptions.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  userProfile =
+                      userProfile!.copyWith(trainingExperience: newValue);
+                  _updateProfile();
+                });
+              }
+            },
           ),
           const SizedBox(height: 16),
           const Text('Körpergewicht (kg)'),
           Text(
-            weight.toStringAsFixed(1),
+            userProfile!.weight.toStringAsFixed(1),
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           const SizedBox(height: 16),

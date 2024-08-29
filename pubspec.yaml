@@ -70,10 +70,10 @@ flutter:
     - assets/database/training_volumes.json
     - assets/database/fragenkatalog_experience.json
     - assets/database/Splits_Default.json
-    - assets/male_backside.svg
-    - assets/male_frontside.svg
-    - assets/female_backside.svg
-    - assets/female_frontside.svg
+    - assets/images/male_backside.svg
+    - assets/images/male_frontside.svg
+    - assets/images/female_backside.svg
+    - assets/images/female_frontside.svg
 
   # Weitere Informationen zum Hinzufügen von Assets aus Paketabhängigkeiten findest du unter
   # https://flutter.dev/assets-and-images/#from-packages
