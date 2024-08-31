@@ -26,23 +26,87 @@ class MuscleGroupSelectionScreen extends StatefulWidget {
       _MuscleGroupSelectionScreenState();
 }
 
-class _MuscleGroupSelectionScreenState
-    extends State<MuscleGroupSelectionScreen> {
+class _MuscleGroupSelectionScreenState extends State<MuscleGroupSelectionScreen>
+    with TickerProviderStateMixin {
   Map<String, List<String>>? frontsideGroupedIds;
   Map<String, List<String>>? backsideGroupedIds;
   Map<String, int> musclePriorities = {};
+  Map<String, AnimationController> _animationControllers = {};
+  Map<String, Animation<Color?>> _colorAnimations = {};
   String _svgFrontsideString = '';
   String _svgBacksideString = '';
   bool _isSwapped = false;
   bool _isLoading = true;
+  double _svgHeight = 500.0; // Initiale Höhe der SVG
+  double _svgOffset = 0.0; // Initiale Verschiebung der SVG
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController(); // Controller für das Scroll-Sheet
+  List<Map<String, dynamic>> focusPresets = []; // Für geladene Presets
 
   @override
   void initState() {
     super.initState();
     _loadGroupedIds();
+    _loadFocusPresets(); // Lade die Presets beim Start
     for (var muscleGroup in widget.muscleGroups) {
       musclePriorities[muscleGroup['name']] = 2;
+
+      // Initialize AnimationController and Animation for each muscle group
+      final controller = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 500),
+      );
+      _animationControllers[muscleGroup['name']] = controller;
+
+      final animation = ColorTween(
+        begin: _colorFromValue(2),
+        end: _colorFromValue(2),
+      ).animate(CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeInOut,
+      ))
+        ..addListener(() {
+          setState(() {}); // Refresh UI when color changes
+        });
+      _colorAnimations[muscleGroup['name']] = animation;
     }
+
+    // Set initial offset based on initial progress
+    _updateSvgPositionAndSize(initial: true);
+    _sheetController.addListener(() => _updateSvgPositionAndSize());
+  }
+
+  // Lade die Fokus-Presets aus der JSON-Datei
+  Future<void> _loadFocusPresets() async {
+    try {
+      final String response =
+          await rootBundle.loadString('assets/database/focus_presets.json');
+      final data = await json.decode(response);
+      setState(() {
+        focusPresets = List<Map<String, dynamic>>.from(data['presets']);
+      });
+    } catch (e) {
+      print('Fehler beim Laden der Fokus-Presets: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _sheetController.removeListener(() => _updateSvgPositionAndSize());
+    _sheetController.dispose();
+    _animationControllers.forEach((key, controller) => controller.dispose());
+    super.dispose();
+  }
+
+  void _updateSvgPositionAndSize({bool initial = false}) {
+    setState(() {
+      // Calculate progress: initial = 0.27 for start value
+      double progress = initial
+          ? 0.0 // Set progress to 0.0 for initial state
+          : (_sheetController.size - 0.27) / (0.6 - 0.27); // Normalize
+      _svgHeight = 500.0 - (progress * (500.0 - 260.0)); // Interpolate height
+      _svgOffset = (-125 * progress) - 10; // Dynamic upward shift
+    });
   }
 
   Future<void> _loadGroupedIds() async {
@@ -91,7 +155,8 @@ class _MuscleGroupSelectionScreenState
 
     groupedIds.forEach((muscleGroup, ids) {
       int priorityValue = musclePriorities[muscleGroup] ?? 2;
-      final color = _colorFromValue(priorityValue);
+      final color = _colorAnimations[muscleGroup]?.value ??
+          _colorFromValue(priorityValue);
       final hexColor = color.value.toRadixString(16).substring(2);
 
       ids.forEach((id) {
@@ -111,17 +176,151 @@ class _MuscleGroupSelectionScreenState
   Color _colorFromValue(int value) {
     switch (value) {
       case 4:
-        return const Color.fromARGB(255, 170, 255, 252); // Fokussieren
+        return const Color.fromARGB(255, 255, 138, 138); // Fokussieren
       case 3:
-        return const Color.fromARGB(255, 216, 255, 254); // Etwas fokussieren
+        return const Color.fromARGB(255, 255, 193, 193); // Etwas Fokussieren
       case 2:
         return Colors.white; // Normal
       case 1:
-        return const Color.fromARGB(255, 175, 175, 175); // Vernachlässigen
+        return const Color.fromARGB(255, 176, 176, 176); // Vernachlässigen
       case 0:
       default:
-        return const Color.fromARGB(255, 125, 125, 125); // Nicht trainieren
+        return const Color.fromARGB(91, 80, 80, 80); // Nicht Trainieren
     }
+  }
+
+  void _animateColorChange(String muscleGroup, int priorityValue) {
+    final controller = _animationControllers[muscleGroup];
+    if (controller != null) {
+      // Create a new animation with updated color values
+      _colorAnimations[muscleGroup] = ColorTween(
+        begin: _colorAnimations[muscleGroup]?.value,
+        end: _colorFromValue(priorityValue),
+      ).animate(CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeInOut,
+      ))
+        ..addListener(() {
+          setState(() {}); // Update UI when color changes
+        });
+
+      // Start the animation
+      controller.forward(from: 0);
+    }
+  }
+
+  void _applyPreset(Map<String, int> priorities) {
+    // Reset all priorities to "Normal" first
+    _resetAllPrioritiesToNormal();
+
+    // Apply the selected preset
+    _setPriorities(priorities);
+  }
+
+  void _resetAllPrioritiesToNormal() {
+    setState(() {
+      widget.muscleGroups.forEach((muscleGroup) {
+        String muscleName = muscleGroup['name'];
+        musclePriorities[muscleName] = 2; // Set all to "Normal"
+        _animateColorChange(muscleName, 2);
+      });
+    });
+  }
+
+  void _setPriorities(Map<String, int> priorities) {
+    setState(() {
+      priorities.forEach((muscle, priority) {
+        musclePriorities[muscle] = priority;
+        _animateColorChange(muscle, priority);
+      });
+    });
+  }
+
+  void _showPresetsDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Fokus-Einstellungen'),
+              IconButton(
+                icon: const Icon(Icons.help_outline),
+                onPressed: _showRecommendations, // Funktion für Empfehlungen
+              )
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: focusPresets.map((preset) {
+              return ListTile(
+                title: Text(preset['name']),
+                onTap: () {
+                  _applyPreset(Map<String, int>.from(preset['priorities']));
+                  Navigator.of(context).pop();
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  // Zeige Empfehlungen basierend auf der Trainingserfahrung und füge die Erfahrung zur Anzeige hinzu
+  void _showRecommendations() {
+    String recommendation;
+    switch (widget.trainingExperience) {
+      case 'Novice':
+      case 'Beginner':
+        recommendation =
+            'Als Anfänger solltest du ein ausgewogenes Training ohne spezielle '
+            'Fokussierung oder Vernachlässigung von Muskelgruppen durchführen.';
+        break;
+      case 'Intermediate':
+        recommendation =
+            'Als Fortgeschrittener kannst du eine gewünschte Fokussierung wählen, '
+            'aber eine individuelle Einstellung ist ebenfalls sinnvoll.';
+        break;
+      case 'Advanced':
+        recommendation =
+            'Für Fortgeschrittene wird empfohlen, individuell nachzuarbeiten und '
+            'Fokussierungen entsprechend anzupassen.';
+        break;
+      case 'Very Advanced':
+        recommendation =
+            'Sehr Fortgeschrittene sollten die Fokussierung vollständig individuell '
+            'einstellen, um gezielt nach persönlichen Bedürfnissen zu trainieren.';
+        break;
+      default:
+        recommendation =
+            'Wählen Sie eine Fokus-Einstellung basierend auf Ihren Trainingszielen.';
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Empfehlungen'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Trainingserfahrung: ${widget.trainingExperience}'),
+              const SizedBox(height: 10),
+              Text(recommendation),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Verstanden'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _navigateToTrainingPlanSettings() {
@@ -135,7 +334,7 @@ class _MuscleGroupSelectionScreenState
           selection[muscleName] = 'Fokussieren';
           break;
         case 3:
-          selection[muscleName] = 'Etwas fokussieren';
+          selection[muscleName] = 'Etwas Fokussieren';
           break;
         case 2:
           selection[muscleName] = 'Normal';
@@ -144,7 +343,7 @@ class _MuscleGroupSelectionScreenState
           selection[muscleName] = 'Vernachlässigen';
           break;
         case 0:
-          selection[muscleName] = 'Nicht trainieren';
+          selection[muscleName] = 'Nicht Trainieren';
           break;
       }
     });
@@ -173,9 +372,13 @@ class _MuscleGroupSelectionScreenState
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -184,6 +387,7 @@ class _MuscleGroupSelectionScreenState
         title: const Text('Muskelgruppen Priorisieren'),
       ),
       body: Stack(
+        alignment: Alignment.center,
         children: [
           Positioned(
             top: 20,
@@ -200,90 +404,149 @@ class _MuscleGroupSelectionScreenState
               ),
             ),
           ),
+          Positioned(
+            left: 20,
+            top: 20,
+            child: IconButton(
+              icon: const Icon(Icons.tune),
+              onPressed: _showPresetsDialog,
+            ),
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: _swapSvgs,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: SvgPicture.string(
-                    _updateSvgColorsEfficiently(
-                      _isSwapped ? _svgBacksideString : _svgFrontsideString,
-                      _isSwapped ? backsideGroupedIds! : frontsideGroupedIds!,
+                  padding: const EdgeInsets.only(
+                      bottom: 140.0), // Konsistentes Padding
+                  child: Transform.translate(
+                    offset: Offset(0, _svgOffset), // Angepasster Offset
+                    child: SvgPicture.string(
+                      _updateSvgColorsEfficiently(
+                        _isSwapped ? _svgBacksideString : _svgFrontsideString,
+                        _isSwapped ? backsideGroupedIds! : frontsideGroupedIds!,
+                      ),
+                      semanticsLabel: 'Aktuelle SVG Ansicht',
+                      height: _svgHeight, // Dynamische SVG-Höhe
                     ),
-                    semanticsLabel: 'Aktuelle SVG Ansicht',
-                    height: 520.0,
                   ),
                 ),
               ),
-              Expanded(
-                child: ListView(
-                  children: musclePriorities.keys.map((muscleName) {
-                    final priorityValue = musclePriorities[muscleName] ?? 2;
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16.0, horizontal: 16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            muscleName,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 0.0),
-                          Text(
-                            _getLabelText(priorityValue),
-                            style: const TextStyle(fontSize: 16),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 5.0),
-                          ToggleButtons(
-                            borderRadius: BorderRadius.circular(10.0),
-                            constraints: const BoxConstraints(
-                              minWidth: 60.0,
-                              minHeight: 35.0,
-                            ),
-                            isSelected: List.generate(
-                              5,
-                              (index) => index == priorityValue,
-                            ),
-                            onPressed: (int index) {
-                              setState(() {
-                                musclePriorities[muscleName] = index;
-                                if (_isSwapped) {
-                                  _svgBacksideString =
-                                      _updateSvgColorsEfficiently(
-                                          _svgBacksideString,
-                                          backsideGroupedIds!);
-                                } else {
-                                  _svgFrontsideString =
-                                      _updateSvgColorsEfficiently(
-                                          _svgFrontsideString,
-                                          frontsideGroupedIds!);
-                                }
-                              });
-                            },
-                            children: const [
-                              Icon(Icons.block, size: 20), // Nicht trainieren
-                              Icon(Icons.arrow_downward,
-                                  size: 20), // Vernachlässigen
-                              Icon(Icons.horizontal_rule, size: 15), // Normal
-                              Icon(Icons.arrow_upward,
-                                  size: 20), // Etwas fokussieren
-                              Icon(Icons.star, size: 20), // Fokussieren
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
             ],
+          ),
+          DraggableScrollableSheet(
+            controller: _sheetController, // Verwendung des Controllers
+            initialChildSize: 0.27,
+            minChildSize: 0.27,
+            maxChildSize: 0.45,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDarkMode ? Colors.black54 : Colors.black26,
+                      blurRadius: 10.0,
+                      spreadRadius: 5.0,
+                      offset: const Offset(0.0, 2.0),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    // Topbar hinzufügen
+                    Container(
+                      width: 40,
+                      height: 6,
+                      margin: const EdgeInsets.only(top: 8, bottom: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: musclePriorities.keys.map((muscleName) {
+                              final priorityValue =
+                                  musclePriorities[muscleName] ?? 2;
+
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      muscleName,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: theme
+                                            .textTheme.headlineSmall?.color,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 8.0),
+                                    Text(
+                                      _getLabelText(priorityValue),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: theme.textTheme.bodyLarge?.color,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 5.0),
+                                    ToggleButtons(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      constraints: const BoxConstraints(
+                                        minWidth: 60.0,
+                                        minHeight: 35.0,
+                                      ),
+                                      isSelected: List.generate(
+                                        5,
+                                        (index) => index == priorityValue,
+                                      ),
+                                      onPressed: (int index) {
+                                        setState(() {
+                                          musclePriorities[muscleName] = index;
+                                          _animateColorChange(
+                                              muscleName, index);
+                                        });
+                                      },
+                                      fillColor: theme.colorScheme.primary
+                                          .withOpacity(0.2),
+                                      children: const [
+                                        Icon(Icons.block,
+                                            size: 20), // Nicht Trainieren
+                                        Icon(Icons.arrow_downward,
+                                            size: 20), // Vernachlässigen
+                                        Icon(Icons.horizontal_rule,
+                                            size: 15), // Normal
+                                        Icon(Icons.arrow_upward,
+                                            size: 20), // Etwas Fokussieren
+                                        Icon(Icons.star,
+                                            size: 20), // Fokussieren
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -291,6 +554,10 @@ class _MuscleGroupSelectionScreenState
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: _navigateToTrainingPlanSettings,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: theme.colorScheme.onPrimary,
+          ),
           child: const Text('Weiter'),
         ),
       ),
@@ -299,10 +566,10 @@ class _MuscleGroupSelectionScreenState
 
   String _getLabelText(int value) {
     const labels = [
-      "Nicht trainieren",
+      "Nicht Trainieren",
       "Vernachlässigen",
       "Normal",
-      "Etwas fokussieren",
+      "Etwas Fokussieren",
       "Fokussieren"
     ];
     return labels[value];

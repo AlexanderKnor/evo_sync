@@ -1,0 +1,64 @@
+{
+  "presets": [
+    {
+      "name": "Ausgewogen",
+      "priorities": {
+        "Abs": 2,
+        "Back": 2,
+        "Biceps": 2,
+        "Calves": 2,
+        "Chest": 2,
+        "Rear Delts": 2,
+        "Side Delts": 2,
+        "Front Delts": 2,
+        "Glutes": 2,
+        "Hamstring": 2,
+        "Quad": 2,
+        "Traps": 2
+      }
+    },
+    {
+      "name": "Oberkörper Fokus",
+      "priorities": {
+        "Chest": 4,
+        "Back": 4,
+        "Biceps": 3,
+        "Triceps": 3,
+        "Rear Delts": 3,
+        "Side Delts": 3,
+        "Traps": 3
+      }
+    },
+    {
+      "name": "Unterkörper Fokus",
+      "priorities": {
+        "Calves": 3,
+        "Glutes": 3,
+        "Hamstring": 4,
+        "Quad": 4
+      }
+    },
+    {
+      "name": "Arni Fokus",
+      "priorities": {
+        "Back": 3,
+        "Biceps": 4,
+        "Triceps": 4,
+        "Chest": 3,
+        "Front Delts": 3,
+        "Rear Delts": 4,
+        "Side Delts": 4,
+        "Traps": 3
+      }
+    },
+    {
+      "name": "Booty Spezial",
+      "priorities": {
+        "Glutes": 4,
+        "Hamstring": 3,
+        "Quad": 3,
+        "Abs": 3
+      }
+    }
+  ]
+}

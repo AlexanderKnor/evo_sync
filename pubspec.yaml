@@ -76,6 +76,7 @@ flutter:
     - assets/images/female_backside.svg
     - assets/images/female_frontside.svg
     - assets/database/body_svg_ids.json
+    - assets/database/focus_presets.json
 
   # Weitere Informationen zum Hinzufügen von Assets aus Paketabhängigkeiten findest du unter
   # https://flutter.dev/assets-and-images/#from-packages
