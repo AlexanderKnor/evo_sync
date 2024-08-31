@@ -75,6 +75,7 @@ class _TrainingFrequencyScreenState extends State<TrainingFrequencyScreen> {
           trainingExperience: widget.userProfile.trainingExperience,
           muscleGroups: muscleGroups, // Übergabe der geladenen Muskelgruppen
           trainingFrequency: _selectedFrequency, // Übergabe der Frequenz
+          gender: widget.userProfile.gender, // Übergabe des Geschlechts
         ),
       ),
     );
@@ -82,48 +83,128 @@ class _TrainingFrequencyScreenState extends State<TrainingFrequencyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    // Define the dark purple color for dark mode
+    final Color darkModePurple = Colors.deepPurpleAccent.withOpacity(0.5);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trainingsfrequenz'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Wie oft möchtest du pro Woche trainieren?',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 16),
-            DropdownButton<int>(
-              value: _selectedFrequency,
-              onChanged: (int? newValue) {
-                setState(() {
-                  _selectedFrequency = newValue!;
-                });
-              },
-              items: List.generate(7, (index) => index + 1)
-                  .map<DropdownMenuItem<int>>((int value) {
-                return DropdownMenuItem<int>(
-                  value: value,
-                  child: Text('$value Mal pro Woche'),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              _recommendationText,
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _navigateToNextScreen,
-              child: const Text('Weiter'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Wie oft möchtest du pro Woche trainieren?',
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: 16),
+              GridView.builder(
+                shrinkWrap:
+                    true, // Ensures the GridView does not expand infinitely
+                physics:
+                    const NeverScrollableScrollPhysics(), // Disable GridView's scrolling
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio:
+                      1.5, // Adjust this value to tweak card height
+                ),
+                itemCount: 6, // 6 cards to exclude "1 Mal pro Woche"
+                itemBuilder: (context, index) {
+                  final frequency = index + 2; // Start from 2 times per week
+                  final isSelected = _selectedFrequency == frequency;
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedFrequency = frequency;
+                      });
+                    },
+                    child: Card(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          gradient: isSelected
+                              ? LinearGradient(
+                                  colors: [
+                                    theme.colorScheme.primary.withOpacity(0.8),
+                                    theme.colorScheme.primary,
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                )
+                              : null,
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: theme.colorScheme.primary
+                                        .withOpacity(0.4),
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ]
+                              : [],
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$frequency Mal pro Woche',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected
+                                  ? theme.colorScheme.onPrimary
+                                  : theme.textTheme.bodyLarge?.color,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              // Enhanced Recommendation Text
+              Text(
+                _recommendationText,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontSize: 15, // Slightly larger font size
+                  fontWeight: FontWeight.bold, // Bold text for emphasis
+                  color:
+                      theme.colorScheme.secondary, // Accent color for emphasis
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
+      // Floating Action Button with padding and specific dark mode color
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(
+            bottom: 20.0, right: 10.0), // Padding to avoid screen edges
+        child: FloatingActionButton(
+          onPressed: _navigateToNextScreen,
+          backgroundColor: isDarkMode
+              ? darkModePurple
+              : theme.colorScheme
+                  .primary, // Dark purple in dark mode, primary in light mode
+          child: const Icon(Icons.check,
+              color: Colors.white), // White icon color for visibility
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

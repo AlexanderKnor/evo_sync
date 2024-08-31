@@ -55,6 +55,12 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    // Define the dark purple color for dark mode
+    final Color darkModePurple = Colors.deepPurpleAccent.withOpacity(0.5);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profildaten'),
@@ -62,6 +68,21 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
       body: userProfile == null
           ? const Center(child: CircularProgressIndicator())
           : _buildProfileForm(),
+      // Floating Action Button with padding and specific dark mode color
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(
+            bottom: 20.0, right: 10.0), // Padding to avoid screen edges
+        child: FloatingActionButton(
+          onPressed: _navigateToNextScreen,
+          backgroundColor: isDarkMode
+              ? darkModePurple
+              : theme.colorScheme
+                  .primary, // Dark purple in dark mode, primary in light mode
+          child: const Icon(Icons.check,
+              color: Colors.white), // White icon color for visibility
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -123,11 +144,6 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
                 userProfile = userProfile!.copyWith(weight: value);
               });
             },
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _navigateToNextScreen,
-            child: const Text('Weiter'),
           ),
         ],
       ),

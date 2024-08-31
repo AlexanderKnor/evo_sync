@@ -51,6 +51,7 @@ dependencies:
 
   # Um Svg Dateien zu verwenden
   flutter_svg: ^2.0.10+1
+  xml: ^6.5.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,7 @@ flutter:
     - assets/images/male_frontside.svg
     - assets/images/female_backside.svg
     - assets/images/female_frontside.svg
+    - assets/database/body_svg_ids.json
 
   # Weitere Informationen zum Hinzufügen von Assets aus Paketabhängigkeiten findest du unter
   # https://flutter.dev/assets-and-images/#from-packages

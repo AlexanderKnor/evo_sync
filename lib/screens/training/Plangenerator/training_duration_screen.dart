@@ -6,11 +6,13 @@ class TrainingDurationScreen extends StatefulWidget {
   final String trainingExperience;
   final List<dynamic> muscleGroups;
   final int trainingFrequency;
+  final String gender;
 
   TrainingDurationScreen({
     required this.trainingExperience,
     required this.muscleGroups,
     required this.trainingFrequency,
+    required this.gender,
   });
 
   @override
@@ -171,6 +173,7 @@ class _TrainingDurationScreenState extends State<TrainingDurationScreen>
           muscleGroups: widget.muscleGroups,
           trainingFrequency: widget.trainingFrequency,
           selectedDuration: _selectedDuration,
+          gender: widget.gender, // Übergeben des Geschlechts
         ),
       ),
     );
@@ -178,24 +181,23 @@ class _TrainingDurationScreenState extends State<TrainingDurationScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    // Define the dark purple color for dark mode
+    final Color darkModePurple = Colors.deepPurpleAccent.withOpacity(0.5);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trainingsumfang wählen',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? Colors.black
-            : Colors.white,
-        foregroundColor: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white
-            : Colors.black,
+        title:
+            const Text('Trainingsumfang wählen'), // Match the exact title style
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 0), // Add space above the card
             TrainingDurationCard(
               selectedDuration: _selectedDuration,
               minSliderValue: _minSliderValue,
@@ -213,30 +215,26 @@ class _TrainingDurationScreenState extends State<TrainingDurationScreen>
               kontextText: getKontextText(),
             ),
             const SizedBox(height: 30),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  _navigateToMuscleGroupSelection(context);
-                },
-                icon: Icon(Icons.arrow_forward, size: 24),
-                label: Text('Weiter'),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
-                  textStyle: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  backgroundColor: Colors.blueAccent,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
+      // Floating Action Button with padding and specific dark mode color
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(
+            bottom: 20.0, right: 10.0), // Padding to avoid screen edges
+        child: FloatingActionButton(
+          onPressed: () {
+            _navigateToMuscleGroupSelection(context);
+          },
+          backgroundColor: isDarkMode
+              ? darkModePurple
+              : theme.colorScheme
+                  .primary, // Dark purple in dark mode, primary in light mode
+          child: const Icon(Icons.check,
+              color: Colors.white), // White icon color for visibility
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

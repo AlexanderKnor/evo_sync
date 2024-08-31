@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TrainingDurationCard extends StatelessWidget {
+class TrainingDurationCard extends StatefulWidget {
   final double selectedDuration;
   final int minSliderValue;
   final int maxSliderValue;
@@ -27,6 +27,48 @@ class TrainingDurationCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _TrainingDurationCardState createState() => _TrainingDurationCardState();
+}
+
+class _TrainingDurationCardState extends State<TrainingDurationCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    // Setting up the pulsing animation to scale uniformly
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(
+        parent: _pulseController,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
+
+  void _handleCoachButtonPressed() {
+    if (widget.selectedDuration == widget.moderateDauer.toDouble()) {
+      // Trigger the pulsing animation if the slider is at the ideal position
+      _pulseController.forward().then((_) => _pulseController.reverse());
+    } else {
+      // Otherwise, call the existing onSetToIdealDuration function
+      widget.onSetToIdealDuration();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final sliderThumbColor = isDarkMode ? Colors.amber[300] : Colors.amber;
@@ -43,20 +85,23 @@ class TrainingDurationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Passe den Trainingsumfang an:',
+              'Passe den Trainingsumfang an',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 21,
                 fontWeight: FontWeight.bold,
                 color: isDarkMode ? Colors.white : Colors.black87,
               ),
             ),
             const SizedBox(height: 16),
-            Text(
-              'Trainingsdauer: ${formatDauer(selectedDuration.toInt())}',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: isDarkMode ? Colors.white : Colors.black87,
+            Center(
+              child: Text(
+                'Trainingsdauer: ${widget.formatDauer(widget.selectedDuration.toInt())}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: isDarkMode ? Colors.white : Colors.black87,
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -74,10 +119,10 @@ class TrainingDurationCard extends StatelessWidget {
                         Colors.redAccent,
                       ],
                       stops: [
-                        (minimaleDauer - minSliderValue) /
-                            (maxSliderValue - minSliderValue),
-                        (moderateDauer - minSliderValue) /
-                            (maxSliderValue - minSliderValue),
+                        (widget.minimaleDauer - widget.minSliderValue) /
+                            (widget.maxSliderValue - widget.minSliderValue),
+                        (widget.moderateDauer - widget.minSliderValue) /
+                            (widget.maxSliderValue - widget.minSliderValue),
                         1.0,
                       ],
                     ),
@@ -88,21 +133,29 @@ class TrainingDurationCard extends StatelessWidget {
                   child: SliderTheme(
                     data: SliderTheme.of(context).copyWith(
                       thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12),
-                      overlayShape:
-                          SliderComponentShape.noOverlay, // Kein Overlay
+                      overlayShape: SliderComponentShape.noOverlay,
                       thumbColor: sliderThumbColor,
                       activeTrackColor: Colors.transparent,
                       inactiveTrackColor: Colors.transparent,
                       trackHeight: 6,
                     ),
-                    child: Slider(
-                      value: selectedDuration,
-                      min: minSliderValue.toDouble(),
-                      max: maxSliderValue.toDouble(),
-                      divisions: maxSliderValue - minSliderValue,
-                      label: null,
-                      onChanged: (double value) {
-                        onDurationChanged(value);
+                    child: AnimatedBuilder(
+                      animation: _pulseAnimation,
+                      builder: (context, child) {
+                        return Transform.scale(
+                          scale: _pulseAnimation.value,
+                          child: Slider(
+                            value: widget.selectedDuration,
+                            min: widget.minSliderValue.toDouble(),
+                            max: widget.maxSliderValue.toDouble(),
+                            divisions:
+                                widget.maxSliderValue - widget.minSliderValue,
+                            label: null,
+                            onChanged: (double value) {
+                              widget.onDurationChanged(value);
+                            },
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -117,7 +170,7 @@ class TrainingDurationCard extends StatelessWidget {
                   children: [
                     Icon(Icons.access_time, color: Colors.greenAccent),
                     Text(
-                      formatDauer(minimaleDauer),
+                      widget.formatDauer(widget.minimaleDauer),
                       style: TextStyle(
                         fontSize: 14,
                         color: isDarkMode ? Colors.grey[400] : Colors.grey[700],
@@ -129,7 +182,7 @@ class TrainingDurationCard extends StatelessWidget {
                   children: [
                     Icon(Icons.whatshot, color: Colors.redAccent),
                     Text(
-                      formatDauer(maximaleDauer),
+                      widget.formatDauer(widget.maximaleDauer),
                       style: TextStyle(
                         fontSize: 14,
                         color: isDarkMode ? Colors.grey[400] : Colors.grey[700],
@@ -141,7 +194,7 @@ class TrainingDurationCard extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              kontextText,
+              widget.kontextText,
               style: TextStyle(
                 fontSize: 16,
                 color: isDarkMode ? Colors.grey[400] : Colors.grey[700],
@@ -150,7 +203,7 @@ class TrainingDurationCard extends StatelessWidget {
             const SizedBox(height: 24),
             Center(
               child: ElevatedButton.icon(
-                onPressed: onSetToIdealDuration,
+                onPressed: _handleCoachButtonPressed,
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
