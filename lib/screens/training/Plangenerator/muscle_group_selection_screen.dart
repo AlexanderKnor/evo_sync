@@ -244,7 +244,7 @@ class _MuscleGroupSelectionScreenState
                           ToggleButtons(
                             borderRadius: BorderRadius.circular(10.0),
                             constraints: const BoxConstraints(
-                              minWidth: 55.0,
+                              minWidth: 60.0,
                               minHeight: 35.0,
                             ),
                             isSelected: List.generate(
@@ -268,11 +268,13 @@ class _MuscleGroupSelectionScreenState
                               });
                             },
                             children: const [
-                              Text("0", style: TextStyle(fontSize: 16)),
-                              Text("1", style: TextStyle(fontSize: 16)),
-                              Text("2", style: TextStyle(fontSize: 16)),
-                              Text("3", style: TextStyle(fontSize: 16)),
-                              Text("4", style: TextStyle(fontSize: 16)),
+                              Icon(Icons.block, size: 20), // Nicht trainieren
+                              Icon(Icons.arrow_downward,
+                                  size: 20), // Vernachlässigen
+                              Icon(Icons.horizontal_rule, size: 15), // Normal
+                              Icon(Icons.arrow_upward,
+                                  size: 20), // Etwas fokussieren
+                              Icon(Icons.star, size: 20), // Fokussieren
                             ],
                           ),
                         ],
