@@ -30,27 +30,27 @@ class _TrainingFrequencyScreenState extends State<TrainingFrequencyScreen> {
   void _setRecommendedFrequency() {
     switch (widget.userProfile.trainingExperience) {
       case 'Novice':
-        _selectedFrequency = 3;
+        _selectedFrequency = 4;
         _recommendationText =
-            'Untrainierten empfehlen wir 3+ Workouts pro Woche.';
+            'Untrainierten empfehlen wir 4 Workouts pro Woche';
         break;
       case 'Beginner':
         _selectedFrequency = 4;
-        _recommendationText = 'Anfängern empfehlen wir 4+ Workouts pro Woche.';
+        _recommendationText = 'Anfängern empfehlen wir 4 Workouts pro Woche';
         break;
       case 'Intermediate':
         _selectedFrequency = 5;
         _recommendationText =
-            'Fortgeschrittenen empfehlen wir 5+ Workouts pro Woche.';
+            'Fortgeschrittenen empfehlen wir 5 Workouts pro Woche';
         break;
       case 'Advanced':
         _selectedFrequency = 6;
-        _recommendationText = 'Profis empfehlen wir 6+ Workouts pro Woche.';
+        _recommendationText = 'Profis empfehlen wir 6 Workouts pro Woche';
         break;
       case 'Very Advanced':
         _selectedFrequency = 6;
         _recommendationText =
-            'Elite-Athleten empfehlen wir 5+ Workouts pro Woche.';
+            'Elite-Athleten empfehlen wir 6 Workouts pro Woche';
         break;
       default:
         _selectedFrequency = 3; // Fallback
@@ -184,7 +184,7 @@ class _TrainingFrequencyScreenState extends State<TrainingFrequencyScreen> {
                   color:
                       theme.colorScheme.secondary, // Accent color for emphasis
                 ),
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
               ),
             ],
           ),
@@ -193,7 +193,8 @@ class _TrainingFrequencyScreenState extends State<TrainingFrequencyScreen> {
       // Floating Action Button with padding and specific dark mode color
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(
-            bottom: 20.0, right: 10.0), // Padding to avoid screen edges
+            bottom: 30.0,
+            right: 16.0), // Padding to match the ProfileDataScreen
         child: FloatingActionButton(
           onPressed: _navigateToNextScreen,
           backgroundColor: isDarkMode

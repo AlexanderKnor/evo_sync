@@ -105,15 +105,15 @@ class _TrainingDurationScreenState extends State<TrainingDurationScreen>
           break;
         case 'Intermediate':
           volumen =
-              istMin ? muskelgruppe['mev']['max'] : muskelgruppe['mav']['max'];
+              istMin ? muskelgruppe['mev']['min'] : muskelgruppe['mav']['max'];
           break;
         case 'Advanced':
           volumen =
-              istMin ? muskelgruppe['mev']['max'] : muskelgruppe['mrv']['min'];
+              istMin ? muskelgruppe['mev']['max'] : muskelgruppe['mav']['max'];
           break;
         case 'Very Advanced':
           volumen =
-              istMin ? muskelgruppe['mav']['min'] : muskelgruppe['mav']['max'];
+              istMin ? muskelgruppe['mev']['max'] : muskelgruppe['mav']['max'];
           break;
         default:
           volumen =
@@ -221,7 +221,7 @@ class _TrainingDurationScreenState extends State<TrainingDurationScreen>
       // Floating Action Button with padding and specific dark mode color
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(
-            bottom: 20.0, right: 10.0), // Padding to avoid screen edges
+            bottom: 30.0, right: 16.0), // Padding to match other screens
         child: FloatingActionButton(
           onPressed: () {
             _navigateToMuscleGroupSelection(context);

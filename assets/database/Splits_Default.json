@@ -39,7 +39,8 @@
             "Side Delts",
             "Triceps",
             "Quad",
-            "Calves"
+            "Calves",
+            "Abs"
           ]
         },
         {
@@ -856,8 +857,7 @@
           "day": "Tag 1",
           "muscle_groups": [
             "Chest",
-            "Back",
-            "Abs"
+            "Back"
           ]
         },
         {
@@ -866,7 +866,8 @@
             "Quad",
             "Hamstring",
             "Glutes",
-            "Calves"
+            "Calves",
+            "Abs"
           ]
         },
         {
@@ -884,8 +885,7 @@
           "day": "Tag 4",
           "muscle_groups": [
             "Chest",
-            "Back",
-            "Abs"
+            "Back"
           ]
         },
         {
@@ -894,7 +894,8 @@
             "Quad",
             "Hamstring",
             "Glutes",
-            "Calves"
+            "Calves",
+            "Abs"
           ]
         },
         {
