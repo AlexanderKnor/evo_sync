@@ -1,0 +1,559 @@
+{
+  "day_types": {
+    "Oberkörper": {
+      "muscle_groups": [
+        "Chest",
+        "Back",
+        "Biceps",
+        "Triceps",
+        "Front Delts",
+        "Rear Delts",
+        "Side Delts",
+        "Traps"
+      ]
+    },
+    "Unterkörper": {
+      "muscle_groups": [
+        "Quad",
+        "Hamstring",
+        "Glutes",
+        "Calves",
+        "Abs"
+      ]
+    },
+    "Push_full": {
+      "muscle_groups": [
+        "Chest",
+        "Triceps",
+        "Front Delts",
+        "Side Delts",
+        "Quad",
+        "Calves",
+        "Abs"
+      ]
+    },
+    "Pull_full": {
+      "muscle_groups": [
+        "Back",
+        "Biceps",
+        "Rear Delts",
+        "Traps",
+        "Hamstring",
+        "Glutes"
+      ]
+    },
+    "Push": {
+      "muscle_groups": [
+        "Chest",
+        "Triceps",
+        "Front Delts",
+        "Side Delts"
+      ]
+    },
+    "Pull": {
+      "muscle_groups": [
+        "Back",
+        "Biceps",
+        "Rear Delts",
+        "Traps"
+      ]
+    },
+    "Beine": {
+      "muscle_groups": [
+        "Quad",
+        "Hamstring",
+        "Glutes",
+        "Calves",
+        "Abs"
+      ]
+    },
+    "Ganzkörper": {
+      "muscle_groups": [
+        "Chest",
+        "Back",
+        "Biceps",
+        "Triceps",
+        "Front Delts",
+        "Rear Delts",
+        "Side Delts",
+        "Traps",
+        "Quad",
+        "Hamstring",
+        "Glutes",
+        "Calves",
+        "Abs"
+      ]
+    },
+    "Brust_Rücken": {
+      "muscle_groups": [
+        "Chest",
+        "Back"
+      ]
+    },
+    "Arme_Schulter": {
+      "muscle_groups": [
+        "Biceps",
+        "Triceps",
+        "Front Delts",
+        "Side Delts",
+        "Rear Delts",
+        "Traps"
+      ]
+    }
+  },
+  "split_variants": [
+    {
+      "name": "Oberkörper/Unterkörper-Split",
+      "days": [
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        }
+      ]
+    },
+    {
+      "name": "Push/Pull-Split",
+      "days": [
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        }
+      ]
+    },
+    {
+      "name": "Ganzkörper-Split",
+      "days": [
+        {
+          "name": "Ganzkörper A",
+          "type": "Ganzkörper"
+        },
+        {
+          "name": "Ganzkörper B",
+          "type": "Ganzkörper"
+        }
+      ]
+    },
+    {
+      "name": "Ganzkörper-Split",
+      "days": [
+        {
+          "name": "Ganzkörper A",
+          "type": "Ganzkörper"
+        },
+        {
+          "name": "Ganzkörper B",
+          "type": "Ganzkörper"
+        },
+        {
+          "name": "Ganzkörper C",
+          "type": "Ganzkörper"
+        }
+      ]
+    },
+    {
+      "name": "Push/Pull/Beine-Split",
+      "days": [
+        {
+          "name": "Push",
+          "type": "Push"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        }
+      ]
+    },
+    {
+      "name": "Arni-Split",
+      "days": [
+        {
+          "name": "Brust/Rücken",
+          "type": "Brust_Rücken"
+        },
+        {
+          "name": "Arme/Schultern",
+          "type": "Arme_Schulter"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        }
+      ]
+    },
+    {
+      "name": "Oberkörper/Unterkörper/Full Body-Split",
+      "days": [
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        },
+        {
+          "name": "Ganzkörper",
+          "type": "Ganzkörper"
+        }
+      ]
+    },
+    {
+      "name": "Push/Pull/Full Body-Split",
+      "days": [
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        },
+        {
+          "name": "Ganzkörper",
+          "type": "Ganzkörper"
+        }
+      ]
+    },
+    {
+      "name": "Oberkörper/Unterkörper-Split",
+      "days": [
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        },
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        }
+      ]
+    },
+    {
+      "name": "Push/Pull-Split",
+      "days": [
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        },
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        }
+      ]
+    },
+    {
+      "name": "Ganzkörper-Split",
+      "days": [
+        {
+          "name": "Ganzkörper A",
+          "type": "Ganzkörper"
+        },
+        {
+          "name": "Ganzkörper B",
+          "type": "Ganzkörper"
+        },
+        {
+          "name": "Ganzkörper C",
+          "type": "Ganzkörper"
+        },
+        {
+          "name": "Ganzkörper D",
+          "type": "Ganzkörper"
+        }
+      ]
+    },
+    {
+      "name": "PPL-OK-UK",
+      "days": [
+        {
+          "name": "Push",
+          "type": "Push"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        },
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        }
+      ]
+    },
+    {
+      "name": "PPL-Push-Pull",
+      "days": [
+        {
+          "name": "Push",
+          "type": "Push"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        },
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        }
+      ]
+    },
+    {
+      "name": "Arni-OK-UK",
+      "days": [
+        {
+          "name": "Brust/Rücken",
+          "type": "Brust_Rücken"
+        },
+        {
+          "name": "Arme/Schultern",
+          "type": "Arme_Schulter"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        },
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        }
+      ]
+    },
+    {
+      "name": "Arni-Push-Pull",
+      "days": [
+        {
+          "name": "Brust/Rücken",
+          "type": "Brust_Rücken"
+        },
+        {
+          "name": "Arme/Schultern",
+          "type": "Arme_Schulter"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        },
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        }
+      ]
+    },
+    {
+      "name": "OK/UK/GK",
+      "days": [
+        {
+          "name": "Oberkörper A",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper A",
+          "type": "Unterkörper"
+        },
+        {
+          "name": "Oberkörper B",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper B",
+          "type": "Unterkörper"
+        },
+        {
+          "name": "Ganzkörper",
+          "type": "Ganzkörper"
+        }
+      ]
+    },
+    {
+      "name": "Push/Pull/GK",
+      "days": [
+        {
+          "name": "Push A",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull A",
+          "type": "Pull_full"
+        },
+        {
+          "name": "Push B",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull B",
+          "type": "Pull_full"
+        },
+        {
+          "name": "Ganzkörper",
+          "type": "Ganzkörper"
+        }
+      ]
+    },
+    {
+      "name": "Push/Pull/Beine-Split",
+      "days": [
+        {
+          "name": "Push",
+          "type": "Push"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        },
+        {
+          "name": "Push",
+          "type": "Push"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        }
+      ]
+    },
+    {
+      "name": "Arni-Split",
+      "days": [
+        {
+          "name": "Brust/Rücken",
+          "type": "Brust_Rücken"
+        },
+        {
+          "name": "Arme/Schultern",
+          "type": "Arme_Schulter"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        },
+        {
+          "name": "Brust/Rücken",
+          "type": "Brust_Rücken"
+        },
+        {
+          "name": "Arme/Schultern",
+          "type": "Arme_Schulter"
+        },
+        {
+          "name": "Beine",
+          "type": "Beine"
+        }
+      ]
+    },
+    {
+      "name": "Oberkörper/Unterkörper",
+      "days": [
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        },
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        },
+        {
+          "name": "Oberkörper",
+          "type": "Oberkörper"
+        },
+        {
+          "name": "Unterkörper",
+          "type": "Unterkörper"
+        }
+      ]
+    },
+    {
+      "name": "Push/Pull",
+      "days": [
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        },
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        },
+        {
+          "name": "Push",
+          "type": "Push_full"
+        },
+        {
+          "name": "Pull",
+          "type": "Pull_full"
+        }
+      ]
+    }
+  ]
+}

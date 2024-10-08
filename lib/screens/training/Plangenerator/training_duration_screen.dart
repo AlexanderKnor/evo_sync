@@ -80,7 +80,8 @@ class _TrainingDurationScreenState extends State<TrainingDurationScreen>
     maxVolumeProTag = (totalVolumeMax / widget.trainingFrequency).ceil();
     moderateVolumeProTag = ((minVolumeProTag + maxVolumeProTag) / 2).ceil();
 
-    int dauerProSatz = 3 * 60; // Durchschnittliche Dauer pro Satz in Sekunden
+    int dauerProSatz =
+        3 * 60; // Durchschnittliche Dauer 3 Min pro Satz in Sekunden
     minimaleDauer = (minVolumeProTag * dauerProSatz)
         .clamp(_minSliderValue, _maxSliderValue);
     moderateDauer = (moderateVolumeProTag * dauerProSatz)

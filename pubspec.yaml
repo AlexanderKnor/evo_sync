@@ -29,7 +29,7 @@ dependencies:
   provider: ^6.0.0
 
   # Animationen in Flutter
-  animations: ^2.0.0
+  animations: ^2.0.11
 
   # Cupertino Icons für iOS-Stil-Symbole
   cupertino_icons: ^1.0.2
@@ -53,6 +53,11 @@ dependencies:
   flutter_svg: ^2.0.10+1
   xml: ^6.5.0
 
+  # design Pakete
+  percent_indicator: ^4.2.3
+  glassmorphism: ^3.0.0
+  rive: ^0.13.13
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -70,13 +75,13 @@ flutter:
     - assets/database/sportarten_met.json
     - assets/database/training_volumes.json
     - assets/database/fragenkatalog_experience.json
-    - assets/database/Splits_Default.json
     - assets/images/male_backside.svg
     - assets/images/male_frontside.svg
     - assets/images/female_backside.svg
     - assets/images/female_frontside.svg
     - assets/database/body_svg_ids.json
     - assets/database/focus_presets.json
+    - assets/database/splits.json
 
   # Weitere Informationen zum Hinzufügen von Assets aus Paketabhängigkeiten findest du unter
   # https://flutter.dev/assets-and-images/#from-packages

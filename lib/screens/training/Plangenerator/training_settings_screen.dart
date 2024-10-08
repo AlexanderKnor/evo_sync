@@ -1,11 +1,14 @@
+// training_plan_settings_screen.dart
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'split_detail_screen.dart'; // Import der neuen Detailansicht
+import 'package:evosync/widgets/training/splits/training_volume_table.dart'; // Import der neuen Tabellen-Komponente
 
 class TrainingPlanSettingsScreen extends StatelessWidget {
   final String volumeType;
-  final int trainingFrequency; // Anzahl der Trainingseinheiten pro Woche
+  final int trainingFrequency; // Anzahl der Trainingstage pro Woche
   final int volumePerDay;
   final double selectedDuration; // In Sekunden
   final String trainingExperience;
@@ -33,16 +36,16 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
 
       switch (selection[muscleName]) {
         case 'Fokussieren':
-          minVolume = muscleGroup['mav']['max'];
-          maxVolume = muscleGroup['mrv']['min'];
-          break;
-        case 'Etwas Fokussieren':
           minVolume = muscleGroup['mav']['min'];
           maxVolume = muscleGroup['mav']['max'];
           break;
+        case 'Etwas Fokussieren':
+          minVolume = muscleGroup['mev']['min'];
+          maxVolume = muscleGroup['mev']['max'];
+          break;
         case 'Normal':
           minVolume = muscleGroup['mev']['min'];
-          maxVolume = muscleGroup['mav']['min'];
+          maxVolume = muscleGroup['mev']['max'];
           break;
         case 'Vernachlässigen':
           minVolume = muscleGroup['mev']['min'];
@@ -52,12 +55,17 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
           minVolume = 0;
           maxVolume = 0;
           break;
+        default:
+          minVolume = 0;
+          maxVolume = 0;
       }
 
       relativeProportions[muscleName] = (minVolume + maxVolume) / 2.0;
     }
 
-    double totalVolume = relativeProportions.values.reduce((a, b) => a + b);
+    double totalVolume = relativeProportions.values.fold(0, (a, b) => a + b);
+    if (totalVolume == 0) totalVolume = 1; // Vermeidung von Division durch Null
+
     relativeProportions.updateAll((muscle, volume) {
       return volume / totalVolume;
     });
@@ -65,49 +73,46 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
     return relativeProportions;
   }
 
-  // Methode zur Berechnung der täglichen Volumenverteilung
-  Map<String, int> _calculateDailyVolumeDistribution() {
-    Map<String, int> dailyVolumeDistribution = {};
-
-    double totalTrainingTime = selectedDuration;
+  // Methode zur Berechnung des gesamten wöchentlichen Volumens basierend auf relativen Proportionen
+  Map<String, int> _calculateTotalVolumeDistribution() {
+    Map<String, int> totalVolumeDistribution = {};
 
     Map<String, double> relativeProportions = _getRelativeVolumeProportion();
 
+    // Gesamte Trainingszeit pro Woche berechnen
+    double totalTrainingTimePerWeek = selectedDuration * trainingFrequency;
+
     for (var muscleGroup in muscleGroups) {
-      double proportion = relativeProportions[muscleGroup['name']]!;
-      double allocatedTimeForMuscle = proportion * totalTrainingTime;
+      String muscleName = muscleGroup['name'];
+      double proportion = relativeProportions[muscleName]!;
+      double allocatedTimeForMuscle = proportion * totalTrainingTimePerWeek;
       int assignedVolume = (allocatedTimeForMuscle / (3 * 60))
-          .round(); // Durchschnittliche Satzdauer von 3 Minuten
-      dailyVolumeDistribution[muscleGroup['name']] = assignedVolume;
+          .round(); // Durchschnittliche Satzdauer von 3 Minuten in Sekunden
+      totalVolumeDistribution[muscleName] = assignedVolume;
+    }
+
+    return totalVolumeDistribution;
+  }
+
+  // Methode zur Berechnung der täglichen Volumenverteilung durch Division des wöchentlichen Volumens
+  Map<String, int> _calculateDailyVolumeDistribution(
+      Map<String, int> totalVolumeDistribution) {
+    Map<String, int> dailyVolumeDistribution = {};
+
+    for (var muscle in totalVolumeDistribution.keys) {
+      int weeklyVolume = totalVolumeDistribution[muscle]!;
+      int dailyVolume = (weeklyVolume / trainingFrequency).round();
+      dailyVolumeDistribution[muscle] = dailyVolume;
     }
 
     return dailyVolumeDistribution;
   }
 
-  // Methode zur Berechnung der gesamten Volumenverteilung für die Woche
-  Map<String, int> _calculateTotalVolumeDistribution(
-      Map<String, int> dailyVolumeDistribution) {
-    Map<String, int> totalVolumeDistribution = {};
-
-    dailyVolumeDistribution.forEach((muscle, dailyVolume) {
-      totalVolumeDistribution[muscle] = dailyVolume * trainingFrequency;
-    });
-
-    return totalVolumeDistribution;
-  }
-
-  // Benutzerdefinierte Rundungsfunktion nach den spezifizierten Regeln
-  int customRound(double value) {
-    if (value - value.floor() <= 0.5) {
-      return value.floor(); // Bis 0,5 abrunden
-    } else {
-      return value.ceil(); // Ab 0,6 aufrunden
-    }
-  }
-
-  // Methode zur gewichteten Verteilung des Volumens auf die Trainingstage basierend auf der Anzahl der Muskelgruppen
+  // Methode zur Verteilung des Volumens unter Berücksichtigung der neuen JSON-Struktur
   Map<String, Map<String, int>> _distributeVolumeAcrossDays(
-      Map<String, int> totalVolumeDistribution, List<dynamic> splitDays) {
+      Map<String, int> totalVolumeDistribution,
+      List<dynamic> splitDays,
+      Map<String, dynamic> dayTypes) {
     Map<String, Map<String, int>> dailyVolume = {};
 
     // Berechne die Summe der Gewichte für jede Muskelgruppe basierend auf der Anzahl der Gruppen pro Tag
@@ -115,12 +120,13 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
     Map<String, Map<String, double>> muscleWeights = {};
 
     for (var day in splitDays) {
-      String dayName = day['day'];
-      int muscleCount = day['muscle_groups'].length;
+      String dayName = day['name'];
+      String dayType = day['type'];
+      List<dynamic> musclesForDay = dayTypes[dayType]['muscle_groups'];
 
       muscleWeights[dayName] = {};
-      for (var muscle in day['muscle_groups']) {
-        muscleWeights[dayName]![muscle] = 1 / muscleCount.toDouble();
+      for (var muscle in musclesForDay) {
+        muscleWeights[dayName]![muscle] = 1 / musclesForDay.length.toDouble();
         muscleWeightsSum[muscle] =
             (muscleWeightsSum[muscle] ?? 0) + muscleWeights[dayName]![muscle]!;
       }
@@ -128,16 +134,19 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
 
     // Verteile das Volumen auf die Tage abhängig von den Gewichten
     for (var day in splitDays) {
-      String dayName = day['day'];
+      String dayName = day['name'];
+      String dayType = day['type'];
+      List<dynamic> musclesForDay = dayTypes[dayType]['muscle_groups'];
+
       Map<String, int> dayVolume = {};
 
-      for (var muscle in day['muscle_groups']) {
+      for (var muscle in musclesForDay) {
         int totalVolume = totalVolumeDistribution[muscle] ?? 0;
         double normalizedWeight =
             (muscleWeights[dayName]![muscle] ?? 0) / muscleWeightsSum[muscle]!;
         double rawVolume = totalVolume * normalizedWeight;
-        int allocatedVolume = customRound(
-            rawVolume); // Verwende die benutzerdefinierte Rundungsfunktion
+        int allocatedVolume =
+            rawVolume.round(); // Verwende die standardmäßige Rundung
         dayVolume[muscle] = allocatedVolume;
       }
 
@@ -147,17 +156,22 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
     return dailyVolume;
   }
 
-  // Lädt die Split-Varianten aus der JSON-Datei
-  Future<List<dynamic>> _loadSplitVariants() async {
-    final String response =
-        await rootBundle.loadString('assets/database/Splits_Default.json');
-    final data = await json.decode(response);
-    return data['split_variants'];
+  // Lädt die day_types und split_variants aus der JSON-Datei
+  Future<Map<String, dynamic>> _loadSplitData() async {
+    try {
+      final String response =
+          await rootBundle.loadString('assets/database/splits.json');
+      final data = await json.decode(response);
+      return data;
+    } catch (e) {
+      print('Fehler beim Laden der Splits: $e');
+      return {};
+    }
   }
 
-  // Filtert geeignete Splits basierend auf der berechneten Volumenverteilung und Trainingsfrequenz
+  // Filtert geeignete Splits basierend auf der Trainingsfrequenz
   List<Map<String, dynamic>> _filterSplits(
-      List<dynamic> splitVariants, Map<String, int> totalVolumeDistribution) {
+      List<dynamic> splitVariants, int trainingFrequency) {
     List<Map<String, dynamic>> suitableSplits = [];
 
     for (var split in splitVariants) {
@@ -165,22 +179,7 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
 
       // Prüft, ob die Anzahl der Tage im Split zur gewünschten Trainingsfrequenz passt
       if (numberOfDays == trainingFrequency) {
-        bool isSuitable = true;
-
-        for (var day in split['days']) {
-          for (var muscleGroup in day['muscle_groups']) {
-            // Überprüft, ob jede Muskelgruppe in den berechneten Volumen enthalten ist
-            if (!totalVolumeDistribution.containsKey(muscleGroup)) {
-              isSuitable = false;
-              break;
-            }
-          }
-          if (!isSuitable) break;
-        }
-
-        if (isSuitable) {
-          suitableSplits.add(split);
-        }
+        suitableSplits.add(split);
       }
     }
 
@@ -189,68 +188,82 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Berechnung des Volumens für jede Muskelgruppe
-    Map<String, int> dailyVolumeDistribution =
-        _calculateDailyVolumeDistribution();
+    // Berechnung des gesamten wöchentlichen Volumens für jede Muskelgruppe
     Map<String, int> totalVolumeDistribution =
-        _calculateTotalVolumeDistribution(dailyVolumeDistribution);
+        _calculateTotalVolumeDistribution();
+
+    // Berechnung der relativen Gewichtung
+    Map<String, double> relativeProportions = _getRelativeVolumeProportion();
+
+    // Berechnung der Gesamtsummen
+    int totalSets = totalVolumeDistribution.values.fold(0, (a, b) => a + b);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Trainingsplan Einstellungen'),
       ),
-      body: FutureBuilder(
-        future: _loadSplitVariants(),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _loadSplitData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
+          } else if (snapshot.hasError ||
+              !snapshot.hasData ||
+              snapshot.data!.isEmpty) {
             return Center(child: Text('Fehler beim Laden der Splits'));
           } else {
-            final splits = _filterSplits(
-                snapshot.data as List<dynamic>, totalVolumeDistribution);
+            final data = snapshot.data!;
+            final dayTypes = data['day_types'] as Map<String, dynamic>;
+            final splitVariants = data['split_variants'] as List<dynamic>;
+
+            // Filtern der Splits basierend auf der Trainingsfrequenz
+            final suitableSplits =
+                _filterSplits(splitVariants, trainingFrequency);
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Volumen pro Muskelgruppe:',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 10),
-                  // Anzeige des Gesamtvolumens pro Woche
-                  ...muscleGroups.map((muscleGroup) {
-                    final muscleName = muscleGroup['name'];
-                    final totalVolume =
-                        totalVolumeDistribution[muscleName] ?? 0;
-
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text('$muscleName: $totalVolume Sätze/Woche',
-                          style: TextStyle(fontSize: 16)),
-                    );
-                  }).toList(),
+                  // Verwendung der ausgelagerten Tabellen-Komponente
+                  TrainingVolumeTable(
+                    muscleGroups: muscleGroups,
+                    totalVolumeDistribution: totalVolumeDistribution,
+                    relativeProportions: relativeProportions,
+                    totalSets: totalSets,
+                    trainingFrequency: trainingFrequency,
+                  ),
                   SizedBox(height: 20),
-                  Text('Empfohlene Splits:',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Empfohlene Splits:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(height: 10),
                   // Anzeige der Splitvarianten ohne detaillierte Volumenverteilung
-                  ...splits.map((split) {
+                  ...suitableSplits.map((split) {
                     return ListTile(
                       title: Text(split['name']),
-                      onTap: () {
-                        // Navigiere zur Detailansicht des Splits
+                      onTap: () async {
+                        // Berechne die tägliche Volumenverteilung für den ausgewählten Split
+                        Map<String, Map<String, int>> distributedVolume =
+                            _distributeVolumeAcrossDays(totalVolumeDistribution,
+                                split['days'], dayTypes);
+
+                        // Navigiere zur Detailansicht des Splits und übergebe alle Variablen
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => SplitDetailScreen(
                               split: split,
-                              distributedVolume: _distributeVolumeAcrossDays(
-                                  totalVolumeDistribution,
-                                  split[
-                                      'days']), // Korrekte Verteilung, falls in der Detailansicht benötigt
+                              distributedVolume: distributedVolume,
+                              volumeType: volumeType,
+                              trainingFrequency: trainingFrequency,
+                              volumePerDay: volumePerDay,
+                              selectedDuration: selectedDuration,
+                              trainingExperience: trainingExperience,
+                              muscleGroups:
+                                  muscleGroups, // Übergabe der Muskelgruppen
+                              selection: selection, // Übergabe der Auswahl
                             ),
                           ),
                         );
@@ -262,6 +275,7 @@ class TrainingPlanSettingsScreen extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         // Aktion zum Speichern des Trainingsplans
+                        // Implementieren Sie hier Ihre Speicherlogik
                       },
                       icon: Icon(Icons.save, size: 24),
                       label: Text('Plan Speichern'),
