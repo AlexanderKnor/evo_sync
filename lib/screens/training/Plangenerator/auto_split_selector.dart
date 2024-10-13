@@ -42,9 +42,11 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   final Map<String, List<String>> synergisticMuscles = {
     'Chest': ['Triceps', 'Front Delts'],
     'Back': ['Biceps', 'Rear Delts', 'Traps'],
-    'Legs': ['Glutes', 'Hamstrings', 'Quads', 'Calves'],
+    'Legs': ['Glutes', 'Hamstring', 'Quad', 'Calves'],
     'Shoulders': ['Front Delts', 'Rear Delts', 'Side Delts'],
     'Arms': ['Triceps', 'Biceps'],
+    'Push': ['Chest', 'Triceps', 'Front Delts', 'Side Delts'],
+    'Pull': ['Back', 'Biceps', 'Rear Delts', 'Traps'],
     // Entferne 'Front Delts', 'Rear Delts', 'Side Delts' usw. als Schlüssel
   };
 
@@ -53,13 +55,14 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     'Back': ['Chest'],
     'Biceps': ['Triceps'],
     'Triceps': ['Biceps'],
-    'Quads': ['Hamstrings'],
-    'Hamstrings': ['Quads'],
+    'Quad': ['Hamstring'],
+    'Hamstring': ['Quad'],
     'Front Delts': ['Rear Delts'],
     'Rear Delts': ['Front Delts'],
-    'Side Delts': [], // Optional: Füge Antagonisten hinzu
-    'Calves': [], // Optional: Füge Antagonisten hinzu
-    'Glutes': [], // Optional: Füge Antagonisten hinzu
+    'Side Delts': [],
+    'Traps': [],
+    'Calves': [],
+    'Glutes': [],
     'Abs': [],
     // Weitere antagonistische Paare können hier hinzugefügt werden
   };
@@ -81,8 +84,8 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   final Set<String> lowerBodyMuscles = {
     'Legs',
     'Glutes',
-    'Hamstrings',
-    'Quads',
+    'Hamstring',
+    'Quad',
     'Calves',
     'Abs',
     // Weitere Unterkörpermuskelgruppen können hier hinzugefügt werden
