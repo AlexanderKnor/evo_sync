@@ -159,41 +159,7 @@
       ]
     },
     {
-      "name": "Push/Pull/Beine-Split",
-      "days": [
-        {
-          "name": "Push",
-          "type": "Push"
-        },
-        {
-          "name": "Pull",
-          "type": "Pull"
-        },
-        {
-          "name": "Beine",
-          "type": "Beine"
-        }
-      ]
-    },
-    {
-      "name": "Arni-Split",
-      "days": [
-        {
-          "name": "Brust/Rücken",
-          "type": "Brust_Rücken"
-        },
-        {
-          "name": "Arme/Schultern",
-          "type": "Arme_Schulter"
-        },
-        {
-          "name": "Beine",
-          "type": "Beine"
-        }
-      ]
-    },
-    {
-      "name": "Oberkörper/Unterkörper/Full Body-Split",
+      "name": "OK/UK/GK-Split",
       "days": [
         {
           "name": "Oberkörper",
@@ -210,7 +176,7 @@
       ]
     },
     {
-      "name": "Push/Pull/Full Body-Split",
+      "name": "Push/Pull/Ganzkörper-Split",
       "days": [
         {
           "name": "Push",
@@ -230,19 +196,19 @@
       "name": "Oberkörper/Unterkörper-Split",
       "days": [
         {
-          "name": "Oberkörper",
+          "name": "Oberkörper A",
           "type": "Oberkörper"
         },
         {
-          "name": "Unterkörper",
+          "name": "Unterkörper A",
           "type": "Unterkörper"
         },
         {
-          "name": "Oberkörper",
+          "name": "Oberkörper B",
           "type": "Oberkörper"
         },
         {
-          "name": "Unterkörper",
+          "name": "Unterkörper B",
           "type": "Unterkörper"
         }
       ]
@@ -251,19 +217,19 @@
       "name": "Push/Pull-Split",
       "days": [
         {
-          "name": "Push",
+          "name": "Push A",
           "type": "Push_full"
         },
         {
-          "name": "Pull",
+          "name": "Pull A",
           "type": "Pull_full"
         },
         {
-          "name": "Push",
+          "name": "Push B",
           "type": "Push_full"
         },
         {
-          "name": "Pull",
+          "name": "Pull B",
           "type": "Pull_full"
         }
       ]
@@ -315,31 +281,6 @@
       ]
     },
     {
-      "name": "PPL-Push-Pull",
-      "days": [
-        {
-          "name": "Push",
-          "type": "Push"
-        },
-        {
-          "name": "Pull",
-          "type": "Pull"
-        },
-        {
-          "name": "Beine",
-          "type": "Beine"
-        },
-        {
-          "name": "Push",
-          "type": "Push_full"
-        },
-        {
-          "name": "Pull",
-          "type": "Pull_full"
-        }
-      ]
-    },
-    {
       "name": "Arni-OK-UK",
       "days": [
         {
@@ -361,31 +302,6 @@
         {
           "name": "Unterkörper",
           "type": "Unterkörper"
-        }
-      ]
-    },
-    {
-      "name": "Arni-Push-Pull",
-      "days": [
-        {
-          "name": "Brust/Rücken",
-          "type": "Brust_Rücken"
-        },
-        {
-          "name": "Arme/Schultern",
-          "type": "Arme_Schulter"
-        },
-        {
-          "name": "Beine",
-          "type": "Beine"
-        },
-        {
-          "name": "Push",
-          "type": "Push_full"
-        },
-        {
-          "name": "Pull",
-          "type": "Pull_full"
         }
       ]
     },
@@ -443,27 +359,27 @@
       "name": "Push/Pull/Beine-Split",
       "days": [
         {
-          "name": "Push",
+          "name": "Push A",
           "type": "Push"
         },
         {
-          "name": "Pull",
+          "name": "Pull A",
           "type": "Pull"
         },
         {
-          "name": "Beine",
+          "name": "Beine A",
           "type": "Beine"
         },
         {
-          "name": "Push",
+          "name": "Push B",
           "type": "Push"
         },
         {
-          "name": "Pull",
+          "name": "Pull B",
           "type": "Pull"
         },
         {
-          "name": "Beine",
+          "name": "Beine B",
           "type": "Beine"
         }
       ]
@@ -472,27 +388,27 @@
       "name": "Arni-Split",
       "days": [
         {
-          "name": "Brust/Rücken",
+          "name": "Brust/Rücken A",
           "type": "Brust_Rücken"
         },
         {
-          "name": "Arme/Schultern",
+          "name": "Arme/Schultern A",
           "type": "Arme_Schulter"
         },
         {
-          "name": "Beine",
+          "name": "Beine A",
           "type": "Beine"
         },
         {
-          "name": "Brust/Rücken",
+          "name": "Brust/Rücken B",
           "type": "Brust_Rücken"
         },
         {
-          "name": "Arme/Schultern",
+          "name": "Arme/Schultern B",
           "type": "Arme_Schulter"
         },
         {
-          "name": "Beine",
+          "name": "Beine B",
           "type": "Beine"
         }
       ]
@@ -501,27 +417,27 @@
       "name": "Oberkörper/Unterkörper",
       "days": [
         {
-          "name": "Oberkörper",
+          "name": "Oberkörper A",
           "type": "Oberkörper"
         },
         {
-          "name": "Unterkörper",
+          "name": "Unterkörper A",
           "type": "Unterkörper"
         },
         {
-          "name": "Oberkörper",
+          "name": "Oberkörper B",
           "type": "Oberkörper"
         },
         {
-          "name": "Unterkörper",
+          "name": "Unterkörper B",
           "type": "Unterkörper"
         },
         {
-          "name": "Oberkörper",
+          "name": "Oberkörper C",
           "type": "Oberkörper"
         },
         {
-          "name": "Unterkörper",
+          "name": "Unterkörper C",
           "type": "Unterkörper"
         }
       ]
@@ -530,27 +446,27 @@
       "name": "Push/Pull",
       "days": [
         {
-          "name": "Push",
+          "name": "Push A",
           "type": "Push_full"
         },
         {
-          "name": "Pull",
+          "name": "Pull A",
           "type": "Pull_full"
         },
         {
-          "name": "Push",
+          "name": "Push B",
           "type": "Push_full"
         },
         {
-          "name": "Pull",
+          "name": "Pull B",
           "type": "Pull_full"
         },
         {
-          "name": "Push",
+          "name": "Push C",
           "type": "Push_full"
         },
         {
-          "name": "Pull",
+          "name": "Pull C",
           "type": "Pull_full"
         }
       ]

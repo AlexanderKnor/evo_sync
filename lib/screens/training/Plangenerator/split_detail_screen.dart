@@ -14,8 +14,6 @@ class SplitDetailScreen extends StatefulWidget {
   final List<dynamic> muscleGroups;
   final Map<String, String> selection;
   final String trainingWeeks;
-
-  // Neuer Parameter für die Periodisierung
   final bool periodizationEnabled;
 
   SplitDetailScreen({

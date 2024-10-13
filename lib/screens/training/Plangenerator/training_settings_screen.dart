@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'split_detail_screen.dart';
+import 'auto_split_selector.dart'; // Import hinzufügen
 import 'package:evosync/widgets/training/splits/training_volume_table.dart';
 
 class TrainingPlanSettingsScreen extends StatefulWidget {
@@ -319,36 +320,52 @@ class _TrainingPlanSettingsScreenState
               child: ElevatedButton(
                 onPressed: selectedSplit != null
                     ? () {
-                        final selectedSplitData = suitableSplits.firstWhere(
-                            (split) => split['name'] == selectedSplit);
-
-                        final dayTypes =
-                            splitData['day_types'] as Map<String, dynamic>;
-                        final distributedVolume = _distributeVolumeAcrossDays(
-                            _calculateTotalVolumeDistribution(),
-                            selectedSplitData['days'],
-                            dayTypes);
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SplitDetailScreen(
-                              split: selectedSplitData,
-                              distributedVolume: distributedVolume,
-                              weeklyVolumeDistribution:
-                                  _calculateTotalVolumeDistribution(),
-                              volumeType: widget.volumeType,
-                              trainingFrequency: widget.trainingFrequency,
-                              volumePerDay: widget.volumePerDay,
-                              selectedDuration: widget.selectedDuration,
-                              trainingExperience: widget.trainingExperience,
-                              muscleGroups: widget.muscleGroups,
-                              selection: widget.selection,
-                              trainingWeeks: selectedWeeks,
-                              periodizationEnabled: isPeriodizationEnabled,
+                        if (selectedSplit == 'Automatisch') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AutoSplitSelector(
+                                  volumeType: widget.volumeType,
+                                  trainingFrequency: widget.trainingFrequency,
+                                  volumePerDay: widget.volumePerDay,
+                                  selectedDuration: widget.selectedDuration,
+                                  trainingExperience: widget.trainingExperience,
+                                  muscleGroups: widget.muscleGroups,
+                                  selection: widget.selection),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          final selectedSplitData = suitableSplits.firstWhere(
+                              (split) => split['name'] == selectedSplit);
+
+                          final dayTypes =
+                              splitData['day_types'] as Map<String, dynamic>;
+                          final distributedVolume = _distributeVolumeAcrossDays(
+                              _calculateTotalVolumeDistribution(),
+                              selectedSplitData['days'],
+                              dayTypes);
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SplitDetailScreen(
+                                split: selectedSplitData,
+                                distributedVolume: distributedVolume,
+                                weeklyVolumeDistribution:
+                                    _calculateTotalVolumeDistribution(),
+                                volumeType: widget.volumeType,
+                                trainingFrequency: widget.trainingFrequency,
+                                volumePerDay: widget.volumePerDay,
+                                selectedDuration: widget.selectedDuration,
+                                trainingExperience: widget.trainingExperience,
+                                muscleGroups: widget.muscleGroups,
+                                selection: widget.selection,
+                                trainingWeeks: selectedWeeks,
+                                periodizationEnabled: isPeriodizationEnabled,
+                              ),
+                            ),
+                          );
+                        }
                       }
                     : null,
                 child: Text('Weiter'),
