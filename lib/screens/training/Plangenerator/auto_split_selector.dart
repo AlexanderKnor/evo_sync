@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:math'; // Importiere dart:math für die sqrt-Funktion
+import 'dart:math'; // Für die sqrt-Funktion
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'split_detail_screen.dart'; // Importiere SplitDetailScreen
@@ -34,7 +34,7 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   Map<String, int> weeklyVolumeDistribution = {};
   Map<String, int> muscleGroupToTrainingDays = {};
 
-  // Neue Variablen zur Speicherung der Abweichungen und des besten Splits
+  // Variablen zur Speicherung der Abweichungen und des besten Splits
   Map<String, Map<String, dynamic>> splitMetrics = {};
   String bestSplitName = '';
 
@@ -45,17 +45,7 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     'Legs': ['Quad', 'Hamstring', 'Glutes', 'Calves'],
     'Shoulders': ['Front Delts', 'Rear Delts', 'Side Delts'],
     'Arms': ['Triceps', 'Biceps'],
-    'Push': [
-      'Chest',
-      'Triceps',
-      'Front Delts',
-      'Side Delts',
-      'Quad',
-      'Glutes',
-      'Calves'
-    ],
-    'Pull': ['Back', 'Biceps', 'Rear Delts', 'Traps', 'Hamstring'],
-    // Entferne 'Front Delts', 'Rear Delts', 'Side Delts' usw. als Schlüssel
+    // Weitere synergistische Muskelgruppen können hier hinzugefügt werden
   };
 
   final Map<String, List<String>> antagonisticMuscles = {
@@ -67,11 +57,6 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     'Hamstring': ['Quad'],
     'Front Delts': ['Rear Delts'],
     'Rear Delts': ['Front Delts'],
-    'Side Delts': [],
-    'Traps': [],
-    'Calves': [],
-    'Glutes': [],
-    'Abs': [],
     // Weitere antagonistische Paare können hier hinzugefügt werden
   };
 
@@ -85,7 +70,6 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     'Rear Delts',
     'Side Delts',
     'Traps',
-    // Weitere Oberkörpermuskelgruppen können hier hinzugefügt werden
   };
 
   final Set<String> lowerBodyMuscles = {
@@ -94,7 +78,6 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     'Glutes',
     'Calves',
     'Abs',
-    // Weitere Unterkörpermuskelgruppen können hier hinzugefügt werden
   };
 
   @override
@@ -121,7 +104,6 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
           'Geladene Splits: ${filteredSplits.map((s) => s['name']).toList()}');
     } catch (e) {
       print('Fehler beim Laden der Splits: $e');
-      // Optional: Zeige eine Fehlermeldung an den Nutzer
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
@@ -133,8 +115,7 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     _calculateAllSplitMetrics();
     _identifyBestSplit();
 
-    // Versuche nur dann, einen individuellen Split zu generieren, wenn genügend Trainingsfrequenz vorhanden ist
-    // nur für Frequenzen > 1
+    // Generiere einen individuellen Split, wenn die Trainingsfrequenz größer als 1 ist
     if (widget.trainingFrequency > 1) {
       await _generateIndividualSplit();
     }
@@ -178,80 +159,68 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   }
 
   Future<void> _generateIndividualSplit() async {
-    // Überprüft, ob die Trainingsfrequenz mindestens 2 ist, da sonst kein Split generiert werden kann.
     if (widget.trainingFrequency < 2) return;
 
-    // Extrahiere die Namen der Muskelgruppen aus den übergebenen Daten und dupliziere sie für das Volumen pro Woche.
     List<String> muscleGroups =
         widget.muscleGroups.map<String>((mg) => mg['name'] as String).toList();
     List<String> muscleAssignments =
         muscleGroups.expand((muscle) => [muscle, muscle]).toList();
 
-    int totalAssignments = muscleAssignments
-        .length; // Gesamtzahl der Zuordnungen (doppelt, da jede Muskelgruppe zweimal pro Woche trainiert wird).
-    int musclesPerDay = (totalAssignments / widget.trainingFrequency)
-        .ceil(); // Anzahl der Muskelgruppen pro Tag.
+    int totalAssignments = muscleAssignments.length;
+    int musclesPerDay = (totalAssignments / widget.trainingFrequency).ceil();
 
-    int attempts =
-        10000; // Maximale Anzahl an Versuchen zur Generierung eines validen Splits.
-    Map<String, dynamic>? bestAssignment; // Speicherung des besten Splits.
-    int bestDeviation = double.maxFinite
-        .toInt(); // Speichert die niedrigste Abweichung von den Zielvolumina.
+    int attempts = 10000;
+    Map<String, dynamic>? bestAssignment;
+    int bestDeviation = double.maxFinite.toInt();
 
     for (int i = 0; i < attempts; i++) {
-      // Shuffle erstellt eine zufällige Reihenfolge der Muskelgruppen, um verschiedene Split-Varianten zu testen.
       List<String> shuffled = List.from(muscleAssignments)..shuffle();
-      List<List<String>> days = List.generate(
-          widget.trainingFrequency, (_) => []); // Liste für jeden Tag im Split.
-      List<Set<String>> daysMuscleTypes = List.generate(
-          widget.trainingFrequency,
-          (_) => <String>{}); // Muskelgruppen-Typen für jeden Tag.
+      List<List<String>> days =
+          List.generate(widget.trainingFrequency, (_) => []);
+      List<Set<String>> daysMuscleTypes =
+          List.generate(widget.trainingFrequency, (_) => <String>{});
 
-      bool valid =
-          true; // Kontrollvariable, um den aktuellen Versuch als ungültig zu markieren, falls er fehlschlägt.
+      bool valid = true;
       for (var muscle in shuffled) {
-        bool isUpper = upperBodyMuscles.contains(
-            muscle); // Prüfen, ob die Muskelgruppe zum Oberkörper gehört.
-        bool isLower = lowerBodyMuscles.contains(
-            muscle); // Prüfen, ob die Muskelgruppe zum Unterkörper gehört.
-        List<int> possibleDays =
-            []; // Liste der möglichen Trainingstage für die Muskelgruppe.
+        bool isUpper = upperBodyMuscles.contains(muscle);
+        bool isLower = lowerBodyMuscles.contains(muscle);
+        List<int> possibleDays = [];
 
-        // Überprüfe jeden Trainingstag auf mögliche Platzierung der aktuellen Muskelgruppe.
         for (int d = 0; d < widget.trainingFrequency; d++) {
           if (!days[d].contains(muscle) && days[d].length < musclesPerDay) {
-            // Nur, wenn die Muskelgruppe noch nicht am Tag vorkommt.
             bool hasUpper = daysMuscleTypes[d].contains('upper');
             bool hasLower = daysMuscleTypes[d].contains('lower');
 
-            if ((isUpper && hasLower) || (isLower && hasUpper))
-              continue; // Ober- und Unterkörper sollten nicht gemischt werden.
+            if ((isUpper && hasLower) || (isLower && hasUpper)) continue;
 
-            bool hasSynergistic = days[d].any((m) =>
-                synergisticMuscles[m]?.contains(muscle) ??
-                false); // Prüfen auf Synergien.
-            bool hasAntagonistic = days[d].any((m) =>
-                antagonisticMuscles[m]?.contains(muscle) ??
-                false); // Prüfen auf Antagonisten.
+            // Überprüfe, ob Muskel oder synergistische Muskeln an angrenzenden Tagen trainiert wurden/werden
+            bool trainedAdjacentDay = false;
+            List<String> synergisticAndMuscle = [muscle];
+            if (synergisticMuscles[muscle] != null) {
+              synergisticAndMuscle.addAll(synergisticMuscles[muscle]!);
+            }
 
-            if (hasSynergistic)
-              possibleDays
-                  .add(d); // Tag priorisieren, wenn Synergien vorhanden sind.
-            else if (hasAntagonistic)
-              possibleDays.add(d); // Andernfalls Tag für Antagonisten.
-            else
-              possibleDays
-                  .add(d); // Andernfalls einen neutralen Tag hinzufügen.
+            if (d > 0) {
+              if (days[d - 1].any((m) => synergisticAndMuscle.contains(m))) {
+                trainedAdjacentDay = true;
+              }
+            }
+            if (d < widget.trainingFrequency - 1) {
+              if (days[d + 1].any((m) => synergisticAndMuscle.contains(m))) {
+                trainedAdjacentDay = true;
+              }
+            }
+            if (trainedAdjacentDay) continue;
+
+            possibleDays.add(d);
           }
         }
 
         if (possibleDays.isEmpty) {
-          // Wenn kein gültiger Tag gefunden wurde, breche den aktuellen Versuch ab.
           valid = false;
           break;
         }
 
-        // Wähle den Tag mit den meisten Synergien oder (bei Gleichstand) den Tag mit den wenigsten Übungen.
         int targetDay = possibleDays.reduce((a, b) {
           int synergyA = days[a]
               .where((m) => synergisticMuscles[m]?.contains(muscle) ?? false)
@@ -264,59 +233,18 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
           return days[a].length <= days[b].length ? a : b;
         });
 
-        // Überprüfen, ob der Muskel oder ein synergistischer Muskel am Vortag trainiert wurde, um zu verhindern, dass Muskeln an aufeinanderfolgenden Tagen trainiert werden.
-        bool trainedPreviousDay = targetDay > 0 &&
-            (days[targetDay - 1].contains(muscle) ||
-                days[targetDay - 1].any(
-                    (m) => synergisticMuscles[m]?.contains(muscle) ?? false));
-
-        if (trainedPreviousDay) {
-          // Suche nach einem alternativen Tag, der die Anforderung erfüllt, Muskeln nicht an aufeinanderfolgenden Tagen zu trainieren.
-          List<int> alternativeDays = possibleDays.where((d) {
-            if (d > 0 &&
-                (days[d - 1].contains(muscle) ||
-                    days[d - 1].any((m) =>
-                        synergisticMuscles[m]?.contains(muscle) ?? false)))
-              return false;
-            return true;
-          }).toList();
-
-          if (alternativeDays.isNotEmpty) {
-            targetDay = alternativeDays.reduce((a, b) {
-              int synergyA = days[a]
-                  .where(
-                      (m) => synergisticMuscles[m]?.contains(muscle) ?? false)
-                  .length;
-              int synergyB = days[b]
-                  .where(
-                      (m) => synergisticMuscles[m]?.contains(muscle) ?? false)
-                  .length;
-
-              if (synergyA != synergyB) return synergyA > synergyB ? a : b;
-              return days[a].length <= days[b].length ? a : b;
-            });
-          } else {
-            valid = false;
-            break;
-          }
-        }
-
-        // Füge die Muskelgruppe dem ausgewählten Tag hinzu und aktualisiere den Muskeltyp.
         days[targetDay].add(muscle);
         if (isUpper)
           daysMuscleTypes[targetDay].add('upper');
         else if (isLower) daysMuscleTypes[targetDay].add('lower');
       }
 
-      if (!valid)
-        continue; // Wenn der Versuch ungültig war, überspringe die Bewertung.
+      if (!valid) continue;
 
-      // Sortiere die Muskelgruppen innerhalb jedes Tages nach Synergien, um die Effizienz des Trainings zu optimieren.
       for (int d = 0; d < widget.trainingFrequency; d++) {
         days[d] = sortMuscleGroupsBySynergy(days[d]);
       }
 
-      // Erstelle die Struktur der Trainingstage für den aktuellen Versuch.
       List<dynamic> splitDays = List.generate(
           widget.trainingFrequency,
           (d) => {
@@ -329,18 +257,16 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
         'name': 'Individuell',
         'days': splitDays
       };
-      final deviationResult = _calculateDeviationPerSplit(
-          individualSplit['days']); // Berechne die Abweichung vom Zielvolumen.
+      final deviationResult =
+          _calculateDeviationPerSplit(individualSplit['days']);
       final totalDeviation = deviationResult['totalDeviation'] as int;
 
-      // Speichere den Split mit der geringsten Abweichung als besten Split.
       if (totalDeviation < bestDeviation) {
         bestDeviation = totalDeviation;
         bestAssignment = individualSplit;
       }
     }
 
-    // Wenn ein gültiger Split gefunden wurde, aktualisiere die Split-Liste und markiere den besten Split.
     if (bestAssignment != null) {
       setState(() {
         filteredSplits.add(bestAssignment);
@@ -351,7 +277,6 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     } else {
       print(
           'Keine gültigen individuellen Splits nach $attempts Versuchen gefunden.');
-      // Optional: Zeige eine Benachrichtigung an den Benutzer
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
@@ -462,7 +387,7 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     Map<String, int> deviationFromTarget = {};
     int totalDeviation = 0;
 
-    // Initialisieren des kumulierten Volumens für jede Muskelgruppe
+    // Initialisiere das kumulierte Volumen für jede Muskelgruppe
     for (var muscle in weeklyVolumeDistribution.keys) {
       cumulativeVolume[muscle] = 0;
     }
@@ -495,7 +420,7 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     };
   }
 
-  // Neue Methode zur Berechnung der Abweichungen und zusätzlichen Kriterien für alle Splits
+  // Berechne die Abweichungen und zusätzlichen Kriterien für alle Splits
   void _calculateAllSplitMetrics() {
     splitMetrics.clear();
     for (var split in filteredSplits) {
@@ -510,13 +435,12 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
       splitMetrics[split['name']] = {
         'totalDeviation': totalDeviation,
         'numberOfDeviations': numberOfDeviations,
-        'deviationMap':
-            deviationMap, // Hinzufügen der deviationMap für Detailansicht
+        'deviationMap': deviationMap,
       };
     }
   }
 
-  // Erweiterte Methode zur Identifizierung des besten Splits unter Berücksichtigung zusätzlicher Kriterien
+  // Identifiziere den besten Split unter Berücksichtigung zusätzlicher Kriterien
   void _identifyBestSplit() {
     if (splitMetrics.isEmpty) return;
 
@@ -557,6 +481,7 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // Anzeige des angepeilten Wochenvolumens
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -604,10 +529,6 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
                   final adjustedVolume = _adjustVolumePerDay(split['days']);
                   final deviationResult =
                       _calculateDeviationPerSplit(split['days']);
-                  final deviation =
-                      deviationResult['deviationMap'] as Map<String, int>;
-                  final totalDeviation =
-                      deviationResult['totalDeviation'] as int;
 
                   // Überprüfen, ob dieser Split der beste Split ist
                   bool isBestSplit = split['name'] == bestSplitName;
@@ -680,7 +601,6 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
                         // Anzeige der Trainingstage und angepassten Volumen
                         ...split['days'].map<Widget>((day) {
                           String dayName = day['name'];
-                          // Safely handle null for dayVolume
                           Map<String, int> dayVolume =
                               adjustedVolume[dayName]?['adjusted'] ?? {};
 
@@ -806,7 +726,7 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     );
   }
 
-  // Methode zur Verteilung des Volumens über die Tage (ähnlich wie in TrainingPlanSettingsScreen)
+  // Methode zur Verteilung des Volumens über die Tage
   Map<String, Map<String, int>> _distributeVolumeAcrossDays(
       Map<String, int> totalVolumeDistribution,
       List<dynamic> splitDays,
@@ -872,7 +792,6 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   }) {
     return Row(
       children: [
-        // Klickbares Icon mit Tooltip
         GestureDetector(
           onTap: () {
             _showMetricDetails(context, metric, splitName);
@@ -887,14 +806,12 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
           ),
         ),
         SizedBox(width: 8),
-        // Label
         Expanded(
           child: Text(
             label,
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
         ),
-        // Wert mit farblicher Hervorhebung
         Text(
           value,
           style: TextStyle(fontSize: 14, color: color),
