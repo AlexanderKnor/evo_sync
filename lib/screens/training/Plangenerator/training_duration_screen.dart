@@ -114,7 +114,7 @@ class _TrainingDurationScreenState extends State<TrainingDurationScreen>
           break;
         case 'Very Advanced':
           volumen =
-              istMin ? muskelgruppe['mev']['max'] : muskelgruppe['mav']['max'];
+              istMin ? muskelgruppe['mav']['min'] : muskelgruppe['mav']['max'];
           break;
         default:
           volumen =

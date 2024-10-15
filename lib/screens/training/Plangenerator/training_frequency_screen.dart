@@ -40,13 +40,13 @@ class _TrainingFrequencyScreenState extends State<TrainingFrequencyScreen>
         _recommendationText = 'Anfängern empfehlen wir 4 Workouts pro Woche';
         break;
       case 'Intermediate':
-        _selectedFrequency = 5;
+        _selectedFrequency = 4;
         _recommendationText =
-            'Fortgeschrittenen empfehlen wir 5 Workouts pro Woche';
+            'Fortgeschrittenen empfehlen wir 4 Workouts pro Woche';
         break;
       case 'Advanced':
-        _selectedFrequency = 6;
-        _recommendationText = 'Profis empfehlen wir 6 Workouts pro Woche';
+        _selectedFrequency = 5;
+        _recommendationText = 'Profis empfehlen wir 5 Workouts pro Woche';
         break;
       case 'Very Advanced':
         _selectedFrequency = 6;

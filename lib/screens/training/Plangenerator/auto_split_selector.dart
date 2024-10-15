@@ -42,11 +42,19 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   final Map<String, List<String>> synergisticMuscles = {
     'Chest': ['Triceps', 'Front Delts'],
     'Back': ['Biceps', 'Rear Delts', 'Traps'],
-    'Legs': ['Glutes', 'Hamstring', 'Quad', 'Calves'],
+    'Legs': ['Quad', 'Hamstring', 'Glutes', 'Calves'],
     'Shoulders': ['Front Delts', 'Rear Delts', 'Side Delts'],
     'Arms': ['Triceps', 'Biceps'],
-    'Push': ['Chest', 'Triceps', 'Front Delts', 'Side Delts'],
-    'Pull': ['Back', 'Biceps', 'Rear Delts', 'Traps'],
+    'Push': [
+      'Chest',
+      'Triceps',
+      'Front Delts',
+      'Side Delts',
+      'Quad',
+      'Glutes',
+      'Calves'
+    ],
+    'Pull': ['Back', 'Biceps', 'Rear Delts', 'Traps', 'Hamstring'],
     // Entferne 'Front Delts', 'Rear Delts', 'Side Delts' usw. als Schlüssel
   };
 
@@ -71,21 +79,19 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   final Set<String> upperBodyMuscles = {
     'Chest',
     'Back',
-    'Shoulders',
-    'Arms',
-    'Triceps',
     'Biceps',
+    'Triceps',
     'Front Delts',
     'Rear Delts',
     'Side Delts',
+    'Traps',
     // Weitere Oberkörpermuskelgruppen können hier hinzugefügt werden
   };
 
   final Set<String> lowerBodyMuscles = {
-    'Legs',
-    'Glutes',
-    'Hamstring',
     'Quad',
+    'Hamstring',
+    'Glutes',
     'Calves',
     'Abs',
     // Weitere Unterkörpermuskelgruppen können hier hinzugefügt werden
