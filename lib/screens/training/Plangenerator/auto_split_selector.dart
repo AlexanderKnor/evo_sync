@@ -41,7 +41,7 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   // Definiere die primären Muskelgruppen und ihre synergistischen Muskelgruppen
   final Map<String, List<String>> synergisticMuscles = {
     'Chest': ['Triceps', 'Front Delts'],
-    'Back': ['Biceps', 'Rear Delts', 'Traps'],
+    'Back': ['Lats', 'Upper Back', 'Biceps', 'Rear Delts', 'Traps'],
     'Legs': ['Quad', 'Hamstring', 'Glutes', 'Calves'],
     'Shoulders': ['Front Delts', 'Rear Delts', 'Side Delts'],
     'Arms': ['Triceps', 'Biceps'],
@@ -49,8 +49,9 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   };
 
   final Map<String, List<String>> antagonisticMuscles = {
-    'Chest': ['Back'],
-    'Back': ['Chest'],
+    'Chest': ['Lats', 'Upper Back'],
+    'Lats': ['Chest'],
+    'Upper Back': ['Chest'],
     'Biceps': ['Triceps'],
     'Triceps': ['Biceps'],
     'Quad': ['Hamstring'],
@@ -63,7 +64,8 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   // Definiere Oberkörper- und Unterkörpermuskelgruppen
   final Set<String> upperBodyMuscles = {
     'Chest',
-    'Back',
+    'Lats',
+    'Upper Back',
     'Biceps',
     'Triceps',
     'Front Delts',
@@ -121,37 +123,120 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
     }
   }
 
-  // Funktion zur Sortierung der Muskelgruppen innerhalb eines Tages basierend auf Synergien
+  // Angepasste Funktion zur Sortierung der Muskelgruppen
   List<String> sortMuscleGroupsBySynergy(List<String> muscleGroups) {
     List<String> sorted = [];
-    Set<String> visited = {};
+    Set<String> visited = Set<String>();
 
-    // Identifiziere primäre Muskelgruppen innerhalb des aktuellen Tages
-    List<String> primaryMuscles = muscleGroups
-        .where((muscle) => synergisticMuscles.containsKey(muscle))
-        .toList();
+    // Entferne Muskelgruppen, die nicht trainiert werden sollen
+    muscleGroups = muscleGroups.where((muscle) {
+      return widget.selection[muscle] != 'Nicht Trainieren';
+    }).toList();
 
-    // Sortiere primäre Muskelgruppen zuerst
-    for (var primary in primaryMuscles) {
-      if (!visited.contains(primary)) {
-        visited.add(primary);
-        sorted.add(primary);
+    // Definiere die Reihenfolge der großen Muskelgruppen
+    List<String> largeMuscles = [
+      'Chest',
+      'Lats',
+      'Upper Back',
+      'Quad',
+      'Hamstring',
+      'Glutes'
+    ];
 
-        // Füge synergistische Muskelgruppen hinzu
-        for (var synergistic in synergisticMuscles[primary]!) {
-          if (muscleGroups.contains(synergistic) &&
-              !visited.contains(synergistic)) {
-            visited.add(synergistic);
-            sorted.add(synergistic);
-          }
+    // Aktualisiere die Prioritäten
+    Map<String, int> focusPriority = {
+      'Fokussieren': 1,
+      'Etwas Fokussieren': 2,
+      'Normal': 3,
+      'Vernachlässigen': 4,
+    };
+
+    // Funktion zur Ermittlung der Priorität einer Muskelgruppe
+    int getMusclePriority(String muscle) {
+      String focus = widget.selection[muscle] ?? 'Normal';
+      return focusPriority[focus] ?? 3; // Standardmäßig 'Normal' Priorität
+    }
+
+    // Berechne die kombinierte Priorität für Lats und Upper Back
+    int latsPriority = getMusclePriority('Lats');
+    int upperBackPriority = getMusclePriority('Upper Back');
+
+    int combinedPriority;
+    if (latsPriority == 1 || upperBackPriority == 1) {
+      combinedPriority = 1;
+    } else if (latsPriority == 2 || upperBackPriority == 2) {
+      combinedPriority = 2;
+    } else {
+      combinedPriority = max(latsPriority, upperBackPriority);
+    }
+
+    // Sortiere die großen Muskelgruppen
+    List<String> largeMusclesOrdered = [];
+
+    largeMuscles.forEach((muscle) {
+      if (muscleGroups.contains(muscle)) {
+        int priority;
+        if (muscle == 'Lats' || muscle == 'Upper Back') {
+          priority = combinedPriority;
+        } else {
+          priority = getMusclePriority(muscle);
         }
+        largeMusclesOrdered.add('$priority|$muscle');
+      }
+    });
+
+    // Sortiere nach Priorität und entferne die Priorität aus dem Namen
+    largeMusclesOrdered.sort();
+    largeMusclesOrdered =
+        largeMusclesOrdered.map((e) => e.split('|')[1]).toList();
+
+    // Füge die sortierten großen Muskelgruppen hinzu
+    for (var muscle in largeMusclesOrdered) {
+      if (!visited.contains(muscle)) {
+        sorted.add(muscle);
+        visited.add(muscle);
       }
     }
 
-    // Füge verbleibende Muskelgruppen hinzu, die keine primären Muskelgruppen sind
-    for (var muscle in muscleGroups) {
+    // Füge fokussierte Muskelgruppen hinzu, die nicht zu den großen Muskelgruppen gehören
+    List<String> focusedMuscles = [];
+    widget.selection.forEach((muscle, focus) {
+      if ((focus == 'Fokussieren' || focus == 'Etwas Fokussieren') &&
+          muscleGroups.contains(muscle) &&
+          !largeMuscles.contains(muscle)) {
+        int priority = focusPriority[focus] ?? 3;
+        focusedMuscles.add('$priority|$muscle');
+      }
+    });
+
+    // Sortiere die fokussierten Muskelgruppen nach Priorität
+    focusedMuscles.sort();
+    focusedMuscles = focusedMuscles.map((e) => e.split('|')[1]).toList();
+
+    // Füge die fokussierten Muskelgruppen hinzu
+    for (var muscle in focusedMuscles) {
       if (!visited.contains(muscle)) {
         sorted.add(muscle);
+        visited.add(muscle);
+      }
+    }
+
+    // Füge die restlichen Muskelgruppen entsprechend der Fokussierung hinzu
+    List<String> remainingMuscles = muscleGroups.where((muscle) {
+      return !visited.contains(muscle) && !largeMuscles.contains(muscle);
+    }).toList();
+
+    remainingMuscles.sort((a, b) {
+      int priorityA = getMusclePriority(a);
+      int priorityB = getMusclePriority(b);
+      return priorityA.compareTo(priorityB);
+    });
+
+    // Füge die restlichen Muskelgruppen hinzu
+    for (var muscle in remainingMuscles) {
+      if (!visited.contains(muscle)) {
+        sorted.add(muscle);
+        visited.add(muscle);
       }
     }
 
@@ -161,10 +246,25 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
   Future<void> _generateIndividualSplit() async {
     if (widget.trainingFrequency < 2) return;
 
-    List<String> muscleGroups =
-        widget.muscleGroups.map<String>((mg) => mg['name'] as String).toList();
-    List<String> muscleAssignments =
-        muscleGroups.expand((muscle) => [muscle, muscle]).toList();
+    // Entferne Muskelgruppen, die nicht trainiert werden sollen
+    List<String> muscleGroups = widget.muscleGroups
+        .map<String>((mg) => mg['name'] as String)
+        .where((muscle) => widget.selection[muscle] != 'Nicht Trainieren')
+        .toList();
+
+    // Anpassung: Gruppiere Lats und Upper Back zusammen
+    if (muscleGroups.contains('Upper Back')) {
+      muscleGroups.remove('Upper Back');
+    }
+
+    // Erstelle die Muskelzuweisungen, wobei Lats und Upper Back kombiniert werden
+    List<String> muscleAssignments = muscleGroups.expand((muscle) {
+      if (muscle == 'Lats') {
+        return ['Lats', 'Lats']; // Da Upper Back mit Lats kombiniert wird
+      } else {
+        return [muscle, muscle];
+      }
+    }).toList();
 
     int totalAssignments = muscleAssignments.length;
     int musclesPerDay = (totalAssignments / widget.trainingFrequency).ceil();
@@ -233,6 +333,11 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
           return days[a].length <= days[b].length ? a : b;
         });
 
+        // Anpassung: Wenn der Muskel Lats ist, füge auch Upper Back hinzu
+        if (muscle == 'Lats' && !days[targetDay].contains('Upper Back')) {
+          days[targetDay].add('Upper Back');
+        }
+
         days[targetDay].add(muscle);
         if (isUpper)
           daysMuscleTypes[targetDay].add('upper');
@@ -293,6 +398,12 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
 
     for (var muscleGroup in widget.muscleGroups) {
       String muscleName = muscleGroup['name'];
+
+      // Überspringe Muskelgruppen, die nicht trainiert werden sollen
+      if (widget.selection[muscleName] == 'Nicht Trainieren') {
+        continue;
+      }
+
       double proportion = relativeProportions[muscleName] ?? 0;
       double allocatedTimeForMuscle = proportion * totalTrainingTimePerWeek;
       int assignedVolume = (allocatedTimeForMuscle / (3 * 60)).round();
@@ -313,13 +424,19 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
           maxVolume = muscleGroup['mav']['max'];
           break;
         case 'Etwas Fokussieren':
-        case 'Normal':
-        case 'Vernachlässigen':
           minVolume = muscleGroup['mev']['min'];
           maxVolume = muscleGroup['mev']['max'];
           break;
-        case 'Nicht Trainieren':
+        case 'Normal':
+          minVolume = muscleGroup['mev']['min'];
+          maxVolume = muscleGroup['mev']['max'];
           break;
+        case 'Vernachlässigen':
+          minVolume = muscleGroup['mv']['min'];
+          maxVolume = muscleGroup['mv']['max'];
+          break;
+        case 'Nicht Trainieren':
+          continue;
         default:
           break;
       }
@@ -350,9 +467,14 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
           : (widget.volumePerDay * 1.1) / totalVolumeForDay;
       Map<String, int> adjustedMuscleVolume = {};
       musclesForDay.forEach((muscle) {
+        // Überspringe Muskelgruppen, die nicht trainiert werden sollen
+        if (widget.selection[muscle] == 'Nicht Trainieren') {
+          return;
+        }
+
         int volume = weeklyVolumeDistribution[muscle] ?? 0;
         int adjustedSets = (volume * adjustmentFactor).round().clamp(1, 12);
-        double maxVolumePerDay = (weeklyVolumeDistribution[muscle]! /
+        double maxVolumePerDay = ((weeklyVolumeDistribution[muscle] ?? 0) /
                 (muscleGroupToTrainingDays[muscle] ?? 1))
             .clamp(1, widget.volumePerDay.toDouble());
         if (adjustedSets > maxVolumePerDay) {
@@ -374,6 +496,12 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
             splitData['day_types'][day['type']] != null
                 ? splitData['day_types'][day['type']]['muscle_groups']
                 : day['muscle_groups'];
+
+        // Überspringe Muskelgruppen, die nicht trainiert werden sollen
+        if (widget.selection[muscleGroup] == 'Nicht Trainieren') {
+          continue;
+        }
+
         if (musclesForDay.contains(muscleGroup)) {
           count++;
         }
@@ -401,6 +529,11 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
           _adjustVolumePerDay(splitDays)[day['name']]?['adjusted'] ?? {};
 
       musclesForDay.forEach((muscle) {
+        // Überspringe Muskelgruppen, die nicht trainiert werden sollen
+        if (widget.selection[muscle] == 'Nicht Trainieren') {
+          return;
+        }
+
         cumulativeVolume[muscle] = (cumulativeVolume[muscle] ?? 0) +
             (adjustedVolumeForDay[muscle] ?? 0);
       });
@@ -744,6 +877,11 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
 
       muscleWeights[dayName] = {};
       for (var muscle in musclesForDay) {
+        // Überspringe Muskelgruppen, die nicht trainiert werden sollen
+        if (widget.selection[muscle] == 'Nicht Trainieren') {
+          continue;
+        }
+
         muscleWeights[dayName]![muscle] = 1 / musclesForDay.length.toDouble();
         muscleWeightsSum[muscle] =
             (muscleWeightsSum[muscle] ?? 0) + muscleWeights[dayName]![muscle]!;
@@ -760,12 +898,17 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
       Map<String, int> dayVolume = {};
 
       for (var muscle in musclesForDay) {
+        // Überspringe Muskelgruppen, die nicht trainiert werden sollen
+        if (widget.selection[muscle] == 'Nicht Trainieren') {
+          continue;
+        }
+
         int totalVolume = totalVolumeDistribution[muscle] ?? 0;
         double normalizedWeight =
             (muscleWeights[dayName]![muscle] ?? 0) / muscleWeightsSum[muscle]!;
         double rawVolume = totalVolume * normalizedWeight;
         int allocatedVolume = rawVolume.round();
-        double maxVolumePerDay = (weeklyVolumeDistribution[muscle]! /
+        double maxVolumePerDay = ((weeklyVolumeDistribution[muscle] ?? 0) /
                 (muscleGroupToTrainingDays[muscle] ?? 1))
             .clamp(1, widget.volumePerDay.toDouble());
         if (allocatedVolume > maxVolumePerDay) {

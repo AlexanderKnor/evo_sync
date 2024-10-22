@@ -17,18 +17,34 @@
       }
     },
     {
-      "name": "Back",
-      "mv": 6,
+      "name": "Lats",
+      "mv": 3,
       "mev": {
-        "min": 8,
-        "max": 11
+        "min": 4,
+        "max": 6
       },
       "mav": {
-        "min": 11,
-        "max": 18
+        "min": 5,
+        "max": 9
       },
       "mrv": {
-        "min": 20,
+        "min": 10,
+        "max": null
+      }
+    },
+    {
+      "name": "Upper Back",
+      "mv": 3,
+      "mev": {
+        "min": 4,
+        "max": 6
+      },
+      "mav": {
+        "min": 5,
+        "max": 9
+      },
+      "mrv": {
+        "min": 10,
         "max": null
       }
     },

@@ -4,7 +4,8 @@
       "name": "Ausgewogen",
       "priorities": {
         "Abs": 2,
-        "Back": 2,
+        "Lats": 2,
+        "Upper Back": 2,
         "Biceps": 2,
         "Calves": 2,
         "Chest": 2,
@@ -21,7 +22,8 @@
       "name": "Oberkörper Fokus",
       "priorities": {
         "Chest": 4,
-        "Back": 4,
+        "Lats": 4,
+        "Upper Back": 4,
         "Biceps": 3,
         "Triceps": 3,
         "Rear Delts": 3,
@@ -41,7 +43,8 @@
     {
       "name": "Arni Fokus",
       "priorities": {
-        "Back": 3,
+        "Lats": 3,
+        "Upper Back": 3,
         "Biceps": 4,
         "Triceps": 4,
         "Chest": 3,

@@ -3,7 +3,8 @@
     "Oberkörper": {
       "muscle_groups": [
         "Chest",
-        "Back",
+        "Lats",
+        "Upper Back",
         "Biceps",
         "Triceps",
         "Front Delts",
@@ -34,7 +35,8 @@
     },
     "Pull_full": {
       "muscle_groups": [
-        "Back",
+        "Lats",
+        "Upper Back",
         "Biceps",
         "Rear Delts",
         "Traps",
@@ -52,7 +54,8 @@
     },
     "Pull": {
       "muscle_groups": [
-        "Back",
+        "Lats",
+        "Upper Back",
         "Biceps",
         "Rear Delts",
         "Traps"
@@ -70,7 +73,8 @@
     "Ganzkörper": {
       "muscle_groups": [
         "Chest",
-        "Back",
+        "Lats",
+        "Upper Back",
         "Biceps",
         "Triceps",
         "Front Delts",
@@ -87,7 +91,8 @@
     "Brust_Rücken": {
       "muscle_groups": [
         "Chest",
-        "Back"
+        "Lats",
+        "Upper Back"
       ]
     },
     "Arme_Schulter": {
