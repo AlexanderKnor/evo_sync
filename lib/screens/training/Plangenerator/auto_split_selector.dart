@@ -40,11 +40,19 @@ class _AutoSplitSelectorState extends State<AutoSplitSelector> {
 
   // Definiere die primären Muskelgruppen und ihre synergistischen Muskelgruppen
   final Map<String, List<String>> synergisticMuscles = {
+    'Lats': ['Upper Back', 'Biceps', 'Traps', 'Rear Delts'],
+    'Upper Back': ['Lats', 'Biceps', 'Traps', 'Rear Delts'],
+    'Biceps': ['Lats', 'Upper Back'],
+    'Triceps': ['Chest', 'Front Delts'],
+    'Calves': ['Hamstring', 'Quad'],
     'Chest': ['Triceps', 'Front Delts'],
-    'Back': ['Lats', 'Upper Back', 'Biceps', 'Rear Delts', 'Traps'],
-    'Legs': ['Quad', 'Hamstring', 'Glutes', 'Calves'],
-    'Shoulders': ['Front Delts', 'Rear Delts', 'Side Delts'],
-    'Arms': ['Triceps', 'Biceps'],
+    'Front Delts': ['Chest', 'Triceps'],
+    'Glutes': ['Hamstring', 'Quad'],
+    'Hamstring': ['Glutes', 'Calves'],
+    'Quad': ['Glutes', 'Hamstring'],
+    'Rear Delts': ['Upper Back', 'Traps'],
+    'Side Delts': ['Rear Delts', 'Traps'],
+    'Traps': ['Upper Back', 'Rear Delts', 'Side Delts']
     // Weitere synergistische Muskelgruppen können hier hinzugefügt werden
   };
 
